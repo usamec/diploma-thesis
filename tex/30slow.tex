@@ -17,6 +17,78 @@ začína vo vrchole 1, prechádza cez množinu vrcholov $X \subseteq V$ a konč�
 $x \in X$.
 
 Tento algoritmus vieme využiť pomerne priamočiaro. Pre každú z $n!$ možných kružníc
-v čase $\tilde{O}(2^n)$ nájdeme najkratšiu druhú kružnicu. Takto dostáneme
+v čase $\tilde{O}(2^n)$ nájdeme najkratšiu druhú kružnicu. Takto dostaneme
 algoritmus, ktorý beží v čase $\tilde{O}(2^n n!)$. 
 
+\section{Lepšie dynamické programovanie}
+
+V tomto prípade budeme robiť dynamické programovanie priamo pre problém
+dvoch obchodných cestujúcich. Náš prístup bude podobný ako pri probléme
+obchodného cestujúceho. 
+Budeme hľadať jednu najkratšiu cestu cez danú podmnožinu vrcholov
+$X$, ktorá začína vo vrchole 1 a končí v danom vrchole $x$. Potrebujeme ešte vyriešiť
+druhú kružnicu. V tomto prípade použijeme pomerne hrubú silu.
+Množinu $X$ rozložíme na tri disjuktné množiny $A, B, C$.
+Cez vrcholy v množine $A$ zatiaľ do druhej kružnice zapojené nebudú. Vrcholy v množine
+$C$ budú spojené v druhej kružnici s inými dvoma vrcholmi.
+A vrcholy v množine $B$ budú spojené iba s jedným vrcholom. Čiže druhá kružnica je
+rozložená na niekoľko ciest, ktoré začínajú vo vrcholoch množiny $B$ idú cez niekoľko
+(alebo nula) vrcholov z množiny $C$ a následne končia vo vrchole z množiny $B$.
+Ešte ale potrebujeme jednu informáciu navyše. A to ktoré koncové body ciest v množine
+$B$ sú spojené (čiže máme rozdelenie množiny $B$ do dvojíc).
+
+A v konečnom dôsledku pre každú kombináciu množín $A, B, C$ vrchola $x$ a rozdelení
+vrcholov v množine $B$ hľadáme cestu $p$ cez vrcholy v množine $A \cup B \cup C$, ktorá
+začína vo vrchole $1$ a končí vo vrchole $x$ a množinu ciest $R$, ktoré
+spĺňajú podmienky množín $A, B, C$, kde cesty z $R$ sú disjuktné s $p$ a navyše cesty
+z $R$ a $p$ sú v súčte čo najkratšie.
+
+Tento podproblém vieme jednoducho riešiť pomocou riešení menších podproblémov.
+Vyskúšame všetky predchádzajúce vrcholy pre vrchol $x$ v prvej ceste a zároveň podľa jeho
+príslušnosti do množiny $A, B, C$ si vyberieme vhodné zapojenie do druhej cesty.
+
+TODO obrazok
+
+
+Tento algoritmus vieme ešte urýchliť jedným orezávaním. Veľkosť množiny
+$B$ môže byť maximálne $\frac{2}{3}n$. V opačnom prípade by sme nevedeli tieto
+cesty spojiť do kružnice (každý zo zvýšných vrcholov vie spojiť dva voľné konce
+v množine $B$).
+
+Teraz odhadneme zložitosť vyššie spomínaného algoritmu. Hlavným faktorom bude počet rôznych
+podproblémov (vyriešenie podproblému nám trvá polynomiálny čas od $n$).
+
+Nech $P(2k)$ je počet rôznych rozdelení $2k$ prvkov do dvojíc:
+$$P(2k) = \frac{(2k)!}{k! 2^k}$$
+
+Pre jednoduchosť dodefinujeme $P(2k+1) = P(2k)$.
+
+%Nech $Z(m, n)$ je počet rôznych podproblémov pre vstup s $n$ vrcholmi, kde platí 
+%$|A| + |B| + |C| = m$:
+%$$Z(m, n) = m \binom{n}{m} \sum_{\substack{0 \leq k,\\ 2k \leq \min \left (m, \frac{2n}{3} \right )}} \binom{m}{2k} 2^{m-2k} P(2k)$$
+%
+%Tento výraz sme dostali z toho, že najprv vyberieme $m$ vrcholov z $n$. Z nich
+%navyše vyberieme osobitný posledný vrchol.
+%Potom tieto vrcholy musíme rozdeliť do množín $A, B, C$. Najprv vyberieme
+%$2k$ vrcholov do množiny $B$, pre zvyšné vrcholy máme $2^{m-2k}$ možností
+%pre rozdelenie do množín $A, C$. Navyše vrcholy v množine $B$ potrebujeme rozdeliť do dvojíc.
+%
+%Celkový počet podproblémov dostaneme ako:
+%$$S(n) = \sum_{m=0}^m Z(m, n)$$
+
+Celkový počet podproblémov odhadneme zhora. Máme najviac $4^n$ možností pre rozdelnie
+vrcholov do množín $A, B, C$ a zvyšok. Jeden vrchol navyše vyberieme ako špeciálny.
+Ešte potrebujeme spárovať množinu $B$ a na to máme najviac $P\left(\floor*{\frac{2}{3}n}\right)$
+možností. A teda počet rôznych podproblémov môžeme odhadnúť ako:
+$$S(n) \leq n 4^n P\left(\floor*{\frac{2}{3}n}\right)$$
+
+Keď na $P(2k)$ použijeme Stirlingovu approximáciu dostávame:
+$$P(2k) = \frac{\sqrt{4\pi k}\frac{(2k)^{2k}}{e^{2k}} (1 + o(1))}
+{\sqrt{2\pi k}\frac{k^{k}}{e^{k}} 2^k (1 + o(1))} =
+\frac{\sqrt{2} \cdot{}2^k n^k}{e^k} (1 + o(1)) =
+\frac{2^k k!}{\sqrt{\pi n}} (1 + o(1)) $$
+
+Po dosadení máme:
+$$S(n) = \tilde{O}\left(2^{2.5n} \left(\frac{n}{3}\right)!\right)$$
+
+Rovnaká (až na polynomiálny faktor) je aj časová zložitosť vyššie popisaného algoritmu.

@@ -23,7 +23,7 @@ dvi: main.dvi
 
 ps: main.ps
 
-main.pdf: main.ps
+main.pdf: */*.tex *.tex Makefile img/*
 	#ps2pdf main.ps
 	rm -f *.toc
 	pdfcslatex main
