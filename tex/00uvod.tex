@@ -1,0 +1,18 @@
+Väčšina programovacích jazykov okrem základných príkazov obsahuje aj sadu knižníc,
+ktorá implementuje ďalšie užitočné funkcionality. Pre nás sú zaujímavé hlavne knižnice, ktoré
+implementujú základné algoritmy a kontajnery v danom jazyku (príkladom je Standard Template
+Library - \cite{STL} z C++). Dôležitou vlastnosťou týchto algoritmov je ich schopnosť
+fungovať nezávisle na type spracovávaných dát.
+
+V kompilátoroch pre jazyk Pascal sa doteraz takéto knižnice nevyskytovali.
+Jedným z hlavných dôvodov bola slabá alebo takmer žiadna podpora pre generics.
+V roku 2008 vyšla verzia 2.2 kompilátora FreePascal, ktorá zaviedla chabú podporu pre
+generics. My sme sa rozhodli niektoré základné kontejnery pre FreePascal pomocou
+generics implementovať a pretlačiť ich medzi knižnice distribuované spolu s FreePascalom.
+
+Členenie tejto práce je nasledovné. V prvej kapitole prezentujeme rozhranie
+našej knižnice, spolu s niekoľkými jednoduchými príkladmi použitia. Táto
+kapitola tvorí akýsi základný manuál. V druhej kapitole prezentujeme implementačné
+detaily jednotlivých komponentov. 
+V poslednej kapitole ukážeme niekoľko experimentálnych porovnaní efektívnosti
+našej implementácie s implementáciou STL v C++.
