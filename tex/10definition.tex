@@ -1,0 +1,21 @@
+V tejto kapitole formálne zadefinujeme problém dvoch obchodných cestujúcich
+a jeho variácie, ktoré budeme riešiť.
+
+\begin{definicia}[Problém dvoch obchodných cestujúcich]
+Majme daný úplný ohodnotený graf $G = (V, E)$ s $n$ vrcholmi, pričom každá hrana
+$e \in E$ má dĺžku $c(e)$. Cieľom je nájsť dve hranovo disjuktné kružnice $K_1 \subset E$,
+$K_2 \subset E$, tak aby súčet ich dĺžok bol minimálny.
+\end{definicia}
+
+V niektorých prípadoch kladieme na dĺžky hrán ďalšie obmedzenia.
+Jedným z obmedzení je trojuholníková nerovnosť:
+
+\begin{definicia}{Trouholníková nerovnosť}
+Hrany uhodnoteného grafu $G = (V, E)$ splňajú trouholníkovú nerovnosť, ak platí:
+$$\forall u,v,w \in V: c(u,v) + c(v,w) \geq c(u,w)$$
+\end{definicia}
+
+Ešte silnejším obmedzením je požadovať, aby vrcholy grafu zodpovedali bodom v rovine.
+
+TODO: definicia
+
