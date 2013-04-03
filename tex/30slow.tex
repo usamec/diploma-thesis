@@ -1,1 +1,22 @@
-TODO
+V tejto kapitole sa budeme venovať pomalým metódam riešenia problému
+dvoch obchodných cestujúcich.
+
+\section{Skúšanie všetkých možností}
+
+V grafe s $n$ vrcholmi sa nachádza $n!$ rôznych kružníc. Pokiaľ hľadáme
+dve disjuktné kružnice, tak rôzných dvojíc kružníc je $\tilde{O}((n!)^2)$.
+Každú z týchto možností vieme overiť v čase $O(n)$. Celkový čas algoritmu
+je teda $\tilde{O}((n!)^2)$.
+
+\section{Dynamické programovanie pre problém obchodného cestujúceho}
+
+Problém obchodného cestujúceho sa dá riešiť pomocou dynamického
+programovania v čase $O(2^n n^2)$ (\cite{Held}). Hlavnou myšlienkou
+tohoto algoritmu je riešiť podproblémy tvaru: Nájdite najkratšiu cestu, ktorá
+začína vo vrchole 1, prechádza cez množinu vrcholov $X \subseteq V$ a končí vo vrchole
+$x \in X$.
+
+Tento algoritmus vieme využiť pomerne priamočiaro. Pre každú z $n!$ možných kružníc
+v čase $\tilde{O}(2^n)$ nájdeme najkratšiu druhú kružnicu. Takto dostáneme
+algoritmus, ktorý beží v čase $\tilde{O}(2^n n!)$. 
+
