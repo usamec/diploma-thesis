@@ -1,0 +1,79 @@
+Zamerajme sa teraz na inštancie, kde vrcholy grafu reprezentujú body v rovine a hrany
+vzdialenosti medzi nimi. V prípade obyčajného problému obchodného cestujúceho
+existuje PTAS (polynomial time approximation scheme) (\cite{Arora}), t.j. algoritmus, ktorý
+pre ľubovoľný aproximačný pomer beží v polynomiálnom čase od veľkosti vstupu.
+
+My v nasledujúcej časti použijeme myšlienky z tohoto algoritmu a ukážeme ako spraviť PTAS pre
+problém dvoch obchodných cestujúcich.
+
+Hlavnou myšlienkou algoritmu pomocou techniky rozdeľuj a panuj vybudovať nad vstupom
+randomizovaný quad-tree. Následne ukážeme, že pre $(1 + 1/c)$-aproximačný algoritmus stačí, aby
+TSP-cesty pretínali hrany delenia iba $O(c)$ krát. Navyše tieto prieniky sa môžu
+udiať iba v niektorých špeciálnych bodoch.
+
+\section{Rekurzívne delenie}
+
+%Rovinu v ktorej ležia vstupné body budeme rekurzívne deliť na menšie časti.
+%Najprv rovinu rozdelíme vodorovnou a zvislou čiarou na štyri časti, každú z nich na ďalšie štyri, ...
+%Takto by sme dostali tzv. quadtree. Na správnu fukčnosť algoritmu potrebujeme ale tzv.
+%posunutý quadtree, kde deliace čiary neprechádzajú stredom, ale sú vyberané náhodne.
+%
+
+Pre začiatok predpokladajme, že všetky body majú celočíselné súradnice a vzdialenosť
+medzi nimi je aspoň $8$. Neskôr ukážeme, že každý vstup vieme takto upraviť a ak budeme mať PTAS
+pre upravený vstup, tak budeme mať PTAS aj pre pôvodný vstup.
+
+Nech všetky body ležia vo vnútri štvorca $S$ so stranou $L$, ktorého ľavý dolný roh
+má súradnice $[0,0]$. Navyše bez ujmy na všeobecnosti nech je $L$ mocnina dvojky.
+
+{\bf Rekurzívnym delením} štvorca $S$ nazývame jeho rekurzívne delenie na menšie štvorce tak, že
+každy štvorec rozdelíme {\bf deliacimi čiarami} na štyri rovnaké štvorce.
+Deliť prestaneme, keď je strana štvorca $\leq 1$. Toto delenie predstavuje
+$4$-árny strom, kde synovia každé ho štvorca sú štyri menšie štvorce. Hĺbka takéhoto stromu je
+najviac $O(\lg L)$. 
+Štvorcom delenia intuitívne priradíme úrovne. Štvorec $S$ má úroveň $0$, jeho synovia úroveň $1$,
+atď. Deliaca čiara má úroveň $i$ vtedy, keď obsahuje hranu nejakého štvorca úrovne $i$, ale žiadneho
+úrovne väčšej ako $i$.
+
+{\bf Quadtree} definujeme podobne 
+až na to, že rekurzívne delenie skončí vtedy, keď v danom štvorci je najviac jeden bod. Keďže každý
+list quadtree obsahuje bod zo vstupu, alebo je súrodenec takého listu, tak quadtree má maximálne
+$O(n)$ listov a teda dokopy najviac $O(n \lg L)$ štvorcov.
+
+\smallskip
+
+Teraz popíšeme posunuté delenie. Nech $a, b$ sú celé čísla a platí $0 \leq a, b < L$.
+$(a,b)$-posunutie rekurzívneho delenia definujeme tak, že $x$-, $y-$ súradnice každej deliacej čiary
+zvýšime o $a$ resp. $b$ a následne spočítame ich zvyšok po delení číslom $L$ (vstupnými bodmi
+nehýbeme). Takisto posunieme aj okrajové čiary štvorca (začnú tvoriť deliace čiary). Pôvodný štvorec
+pokladáme za zacyklený, teda okrajové oblasti pri posunutom delení tvoria súvislú oblasť ako na
+obrázku.
+
+TODO obrázok
+
+Z posunutého rekurzívneho delenia vieme dodefinovať quadtree s posunom tak, že nebudeme deliť
+štvorce, ktoré obsahujú najviac jeden bod.
+
+\section{Portály a $(m,r)$-ľahké cesty}
+
+Nás algoritmus dovolí TSP-cestám pretínať čiary delenia iba v niekoľkých
+predpísaných bodoch, tzv. {\bf portáloch}. Toto je na prvý pohľad trochu kontraintuitívne.
+My ale dovolíme cestujúcim cestovať medzi bodmi po ľubovoľnej čiare, teda nie nutne najkratšej
+ceste medzi dvoma bodmi (viď. obrázok nižšie). Stále ale zachovávame disjuktnosť ciest, t.j. keď
+jeden cestujúci ide z vrchola $x$ do vrcholu $y$, tak druhý nemôže ísť z $x$ do $y$ ani z $y$ do
+$x$ (nech ide ľubovoľne zakrivenou cestou). 
+
+\begin{definicia}
+Nech $m$ je párne kladné celé číslo. $m$-regulárna množina portálov pre posunuté rekurzívne
+delenie je množina bodov taká, že každá deliacia čiara úrovne $i$ obsahuje portály vo
+vzdialenostiach $\frac{L}{m2^i}$. 
+\end{definicia}
+
+TODO obrázok
+
+\begin{definicia}
+TSP-cesta sa nazýva $(m,r)$-ľahká ak pretína čiary rekurzívneho delenia iba v $m$-regulárnej
+množine portálov a navyše každú hranu štvorca pretína najviac $r$-krát.
+\end{definicia}
+
+

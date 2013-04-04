@@ -46,6 +46,8 @@ z $R$ a $p$ sú v súčte čo najkratšie.
 Tento podproblém vieme jednoducho riešiť pomocou riešení menších podproblémov.
 Vyskúšame všetky predchádzajúce vrcholy pre vrchol $x$ v prvej ceste a zároveň podľa jeho
 príslušnosti do množiny $A, B, C$ si vyberieme vhodné zapojenie do druhej cesty.
+Keďže nové hrany pridávame len poslednému vrcholu, vieme priamočiaro kontrolovať podmienku
+disjuknosti ciest.
 
 TODO obrazok
 
@@ -89,6 +91,6 @@ $$P(2k) = \frac{\sqrt{4\pi k}\frac{(2k)^{2k}}{e^{2k}} (1 + o(1))}
 \frac{2^k k!}{\sqrt{\pi n}} (1 + o(1)) $$
 
 Po dosadení máme:
-$$S(n) = \tilde{O}\left(2^{2.5n} \left(\frac{n}{3}\right)!\right)$$
+$$S(n) = \tilde{O}\left(2^{2.334n} \left(\frac{n}{3}\right)!\right)$$
 
 Rovnaká (až na polynomiálny faktor) je aj časová zložitosť vyššie popisaného algoritmu.
