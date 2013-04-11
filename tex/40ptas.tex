@@ -96,7 +96,8 @@ TODO perturbacia
 
 V nasledujúcom kroku zvolíme hodnoty $a, b$ -- posuny quad-tree. Môžeme ich zvoliť náhodne
 a uspokojiť sa s tým, že máme iba pravdepodnostný algoritmus, alebo môžeme postupne vyskúšať všetky
-hodnoty za cenu vyššej časovej zložitosti. Teraz môžeme skonštruovať posunutý quad-tree.
+hodnoty za cenu vyššej časovej zložitosti o faktor $O(n^2)$. Pre zvyšok tejto kapitoly budeme
+predpokladať, že $a, b$ volíme náhodne. Teraz môžeme skonštruovať posunutý quad-tree. 
 Keďže po predchádzajúcom kroku máme $L = O(n)$ a hĺbka quad-tree je teda najviac $O(\lg n)$, potom
 počet štvorcov v quad-tree je $O(n \lg n)$ (lebo máme maximálne $n$ listov). Tento quadtree vieme
 pomerne jednoducho skonštruovať v čase $O(n \lg n)$.
@@ -137,9 +138,23 @@ $v^b_1, v^b_2, \dots, v^b_{2q}$.
 Jeho výstupom je postupnosť ciest definovaná vyššie.
 
 Predtým než ukážeme ako tento podproblém riešiť spočítame počet rôznych podproblémov.
-Ako sme spomínali máme $O(n \lg n)$ štvorcov. Rôznych postupnosti portálov bude $O(m)^{O(r)}$.
+Ako sme spomínali máme $O(n \lg n)$ štvorcov. Rôznych postupnosti portálov bude $O(m^{O(r)})$.
 Rôznych postupnosti vrcholov bude $O(n^{O(r)})$. Keďže $r = O(c)$, tak stále
 máme PTAS. Neskôr ukážeme ako zmenšiť člen $O(n^{O(r)})$ na člen $O(n)$.
 
+Podproblémy vieme riešiť nasledovne. Pokiaľ obsahuje štvorec iba jeden vrchol vieme v čase $O(r)$. vyskúšať všetky
+možné priradenia. Zobereme si teraz štvorec $S$, ktorý má synov $S_1, S_2, S_3, S_4$. Pre jeho synov
+už máme vyriešené všetky podproblémy. Chceme teraz nájsť najlacnejšie $(m, r)$-ľahké cesty pre
+štvorec $S$. Preskúšame všetky možnosti akoby cesty mohli prechádzať hranami štvorcov $S_1, S_2,
+S_3, S_4$. To obnáša vybrať poradie prechodu portálmi a vrcholy, ktorými cesta bude prechádzať po
+prechode portálom. Ešte potrebujeme skontrolovať disjukntosť ciest. Medzi vrcholmi vrámci štvorcov
+$S_1, S_2, S_3, S_3$ máme disjuknosť zaručenú. Treba ešte zaručiť aj disjuktnosť ak cesta prechádza
+medzi vrcholmi z rôznych štvorcov. To vieme zaručiť pomocou toho, že sa pozrieme aké vrcholy
+nasledujú za portálmi a nepovolíme tie možnosti, v ktorých sú spojené rovnaké dvojice vrcholov v
+oboch TSP cestách. Časová zložitosť tohoto kroku je najviac $O(n^{O(r)} m^{O(r)})$.
+
+Celkový čas tohoto algoritmu je $O(n^{O(r)} m^{O(r)})$, čo je $O(n^{O(c)})$.
+
+\section{Dôkaz hlavnej vety}
 
 
