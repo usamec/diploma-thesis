@@ -76,4 +76,70 @@ TSP-cesta sa nazýva $(m,r)$-ľahká ak pretína čiary rekurzívneho delenia ib
 množine portálov a navyše každú hranu štvorca pretína najviac $r$-krát.
 \end{definicia}
 
+TODO theorem poriadne
+
+Teraz sformuluje hlavnú vetu, ktorá dokazuje koreknosť nášho algoritmu.
+
+\begin{veta}
+Nech $c > 0$ je ľubovoľná konštanta. Nech sú všetky body vo vstupe vzdialené aspoň $8$ a nech všetky
+body ležia vo vnútri štvorca so stranou $L$. Nech $0 \leq a, b < L$ sú vybrané náhodne. Potom s
+pravdepodobnosťou aspoň $1/2$ existujú dve disjuktné $(m,r)$-ľahké TSP-cesty, ktorých dĺžka je maximálne $(1 +
+1/c)$-násobok optimálnej dĺžky, pričom $m = O(c \lg L)$, $r = O(c)$.
+\end{veta}
+
+Dôkaz tejto vety uvedieme neskôr. 
+Najprv sa pozrime na hľadanie najkratších $(m, r)$-ľahkých ciest.
+
+\section{Popis algoritmu}
+
+TODO perturbacia
+
+V nasledujúcom kroku zvolíme hodnoty $a, b$ -- posuny quad-tree. Môžeme ich zvoliť náhodne
+a uspokojiť sa s tým, že máme iba pravdepodnostný algoritmus, alebo môžeme postupne vyskúšať všetky
+hodnoty za cenu vyššej časovej zložitosti. Teraz môžeme skonštruovať posunutý quad-tree.
+Keďže po predchádzajúcom kroku máme $L = O(n)$ a hĺbka quad-tree je teda najviac $O(\lg n)$, potom
+počet štvorcov v quad-tree je $O(n \lg n)$ (lebo máme maximálne $n$ listov). Tento quadtree vieme
+pomerne jednoducho skonštruovať v čase $O(n \lg n)$.
+
+Teraz ideme nájsť v skonštruovanom posunutom quad-tree nájsť najlacnejšie $(m,r)$-ľahké disjuktné
+TSP cesty. Využijeme techniku dynamického programovania.
+
+Zoberme si štvorec $S$ z quad-tree a optimálne $(m,r)$-ľahké TSP cesty. Prvá z nich pretína hranicu
+štvorca $S$ postupne v bodoch $a_1, a_2, \dots, a_{2p}$, kde $2p \leq 4r$ a druhá v bodoch $b_1, b_2,
+\dots, b_{2q}$, kde $2q \leq 4r$. 
+
+Časti TSP ciest vo vnútri $S$ je postupnosť ciest, ktoré majú konce v bodoch $a_{2i - 1}, a_{2i}$,
+resp. $b_{2j - 1}, b_{2j}$, pre $i = 1, 2, \dots, p$, resp. $j = 1, 2, \dots q$.
+Tieto cesty navyše prechádzajú všetkými bodmi vo vnútri $S$ a ich zjednotenie je $(m,r)$-ľahké.
+Navyše sú tieto cesty disjuktné, t.j. neexistujú dva vrcholy $v_i$, $v_j$ vo vnútri $S$ také, že 
+v obidvoch postupnostiach sú $v_i$ a $v_j$ spojené.
+Ešte si všimnime vrcholy, ktoré nasledujú na cestách po jednotlivých prienikoch (keď pokračujeme po
+ceste od prieniku smerom dovnútra štvorca).
+Postupne ich označme pre prvú cestu ako $v^a_1, v^a_2, \dots, v^a_{2p}$ a pre druhú cestu ako
+$v^b_1, v^b_2, \dots, v^b_{2q}$. Tieto vrcholy nemusia byť nutne vrcholy vo vnútri $S$, keďže časť
+cesty môže prechádzať cez štvorec $S$, ale nemusí prechádzať cez žiadny vrchol.
+
+Keďže máme optimálnu $(m,r)$-ľahkú cestu, tak aj postupnosť ciest uvedená vyššie je optimálna, t.j.
+najlacnejšia taká, že jednotlivé cesty majú konce v zadaných bodoch $a_1, a_2, \dots, a_{2p}$, resp. $b_1, b_2,
+\dots, b_{2q}$, najbližšie vrcholy ku koncom sú $v^a_1, v^a_2, \dots, v^a_{2p}$, resp.
+$v^b_1, v^b_2, \dots, v^b_{2q}$ a tieto cesty prechádzajú všetkými bodmi vo vnútri $S$ a zároveň sú
+disjuktné.
+
+Teraz môžeme definovať vhodný podproblém pre dynamické programovanie. Jeho vstupmi budú:
+\begin{itemize}
+\item Štvorec $S$ z posunutého quad-tree.
+\item Postupnosti portálov, ktoré majú cesty pretínať: $a_1, a_2, \dots, a_{2p}$, $b_1, b_2, \dots,
+b_{2q}$.
+\item Postupnosti vrcholov, do ktorých pôjdu cesty za portálmi: $v^a_1, v^a_2, \dots, v^a_{2p}$,.
+$v^b_1, v^b_2, \dots, v^b_{2q}$.
+\end{itemize}
+
+Jeho výstupom je postupnosť ciest definovaná vyššie.
+
+Predtým než ukážeme ako tento podproblém riešiť spočítame počet rôznych podproblémov.
+Ako sme spomínali máme $O(n \lg n)$ štvorcov. Rôznych postupnosti portálov bude $O(m)^{O(r)}$.
+Rôznych postupnosti vrcholov bude $O(n^{O(r)})$. Keďže $r = O(c)$, tak stále
+máme PTAS. Neskôr ukážeme ako zmenšiť člen $O(n^{O(r)})$ na člen $O(n)$.
+
+
 
