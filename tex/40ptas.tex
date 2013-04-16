@@ -157,4 +157,97 @@ Celkový čas tohoto algoritmu je $O(n^{O(r)} m^{O(r)})$, čo je $O(n^{O(c)})$.
 
 \section{Dôkaz hlavnej vety}
 
+Pri dôkaze hlavnej vety využijeme dve pomocné lemy. Prvou z nich je tzv. "Patching lema".
+Pre problém obchodného cestujúceho je jej znenie nasledovné:
 
+\begin{lema}[Patching lema]
+Existuje konštanta $g > 0$ taká, že platí nasledovné: Nech $S$ je úsečka dĺžky $s$ a $\pi$ je
+uzavretá cesta, ktorá pretína $S$ aspoň $3$-krát. Potom existuje množina podúsečiek $S$ s dĺžkou najviac
+$gs$, ktorých pridaním do $\pi$ dostaneme cestu $\pi^{'}$, ktorá pretína $S$ najviac $2$-krát.
+\end{lema}
+
+Dôkaz tejto lemy sa dá nájsť v \cite{Arora}. My ho tu stručne zhrnieme.
+
+\begin{dokaz}
+Predpokladajeme, že $\pi$ pretína $S$ práve $t$ krát v bodoch $M_1, M_2, \dots, M_t$ -- body
+označíme v poradí v akom sa vyskytujú na úsečke $S$.
+Cestu $\pi$ v týchto bodoch rozsekneme na $t$ častí $P_1, P_2, \dots, P_t$. Z každého bodu $M_i$
+si pripravíme dve kópie -- $M_i^{'}$ a $M_i^{''}$, každú kópiu umiestnime na jednu stranu $S$.
+Nech $J$ je multimnožina úsečiek, ktorá obsahuje nasledovné:
+\begin{itemize}
+\item Najlacnejšiu kružnicu, ktorá prechádza cez body $M_1, M_2, \dots, M_t$.
+\item Najlacnejšie perfektné párenie medzi bodmi $M_1, M_2, \dots, M_{2k}$, kde $2k$ je najväčšie
+párne číslo menšie ako $t$. 
+\end{itemize}
+
+Množina $J$ má dĺžku najviac $3s$. Množinu $J$ opäť zoberieme v dvoch kópiách -- $J^{'}$, $J^{''}$ a pridáme ju k ceste $\pi$.
+Ešte navyše ak je $t$ nepárne, tak spojíme body $M_{2k+1}^{'}$ a $M_{2k+1}^{''}$ a ak je $t$ párne,
+tak spojíme body $M_{2k+1}^{'}$ a $M_{2k+1}^{''}$ a body $M_{2k+2}^{'}$ a $M_{2k+2}^{''}$.
+Spolu cesty $P_1, P_2, \dots, P_t$ a pridané úseky tvoria $4$-regulárny graf na vrcholoch
+$\{M_1^{'}, \dots, M_t^{'}\} \cup \{M_1^{''}, \dots, M_t^{''}\}$. Eulerovský ťah na tomto grafe
+prechádza všetkými cestami $P_1, \dots, P_t$ a navyše pretína $S$ najviac dvakrát. Navyše
+súčet všetkých pridaných úsečiek je najviac $6s$. A teda sme dokázali túto vetu pre $g = 6$.
+\end{dokaz}
+
+My potrebujeme túto lemu zovšeobecniť pre dvoch obchodných cestujúcich.
+
+\begin{lema}
+Existuje konštanta $g > 0$ taká, že platí nasledovné: Nech $S$ je úsečka dĺžky $s$ a $\pi$ je
+uzavretá cesta, ktorá pretína $S$ aspoň $20$-krát. Nech $\pi_2$ je cesta disjuktná s $\pi$.
+Potom existuje množina podúsečiek $S$ s dĺžkou najviac
+$gs$, ktorých pridaním do $\pi$ dostaneme cestu $\pi^{'}$, ktorá pretína $S$ najviac $20$-krát a
+zároveň nepretína cestu $\pi_2$.
+\end{lema}
+
+\begin{dokaz}
+Vďaka patching leme vieme cestu $\pi$ previesť na cestu $\pi^{'}$, ktorá pretína $S$ najviac
+dvakrát. Predpokladajme, že $\pi^{'}$ bola zostrojená pomocou predchádzajúceho dôkazu a teda vedie
+cez body $M_1^{'}, \dots, M_t^{'}, M_1^{''}, \dots, M_t^{''}$. Táto cesta môže ale zdieľať niektoré
+hrany s cestou $\pi_2$. Teda môže existovať niekoľko dvojíc bodov $(x, y)$ takých, ktoré sú spojené
+aj v $\pi$ aj v $\pi_2$. Týchto dvojíc je najviac $2t$, keďže najviac $2t$ bodom sme zmenili suseda. 
+
+Zakázanou dvojicou budume nazývať dvojicu bodov $(x, y)$ takú, že $x$ a $y$ sú susedné na
+ceste $\pi_2$. Každý vrchol sa teda vyskytuje práve v dvoch zakázaných dvojiciach.
+
+Našim cieľom je upraviť cestu $\pi^{'}$ tak, aby neobsahovala ani jednu zakázanú dvojicu.
+Zakázané dvojice budeme odstránovať postupne.
+
+Nech $(x,y)$ je zakázaná dvojica, ktorá sa vyskytuje v $\pi^{'}$. Rozlišujeme niekoľko prípadov
+(všetky prípady majú obdobu pre druhú stranu úsečky $S$).
+\begin{enumerate}
+\item Cesta $\pi^{'}$ od $x$ smerom k $y$ najprv prechádza bodmi $M_i^{'}$ a $M_{i+1}^{'}$ (resp.
+$M_{i-1}^{'}$.
+\item Cesta $\pi^{'}$ od $x$ smerom k $y$ najprv prechádza bodmi $M_t^{'}$ a $M_{1}^{'}$ (alebo
+opačne).
+\item Cesta $\pi^{'}$ od $x$ smerom k $y$ najprv prechádza bodmi $M_i^{'}$ a $M_i^{''}$ (alebo
+opačne), kde $i = t$, alebo $i = t-1$.
+\end{enumerate}
+
+Myšlienka odstránenia zakázanej dvojice bude nasledovná. V blízkosti $M_i^{'}$ (resp. $M_t^{'}$)
+nájdeme úsečku medzi bodmi $M_j^{'}$, $M_j^{'}$, cez ktorú cesta $\pi_{'}$ spája vrcholy $u, v$
+a dvojice $(x,u), (x,v), (y,u), (y,v)$ nie sú zakázané. Potom prehodíme úsečky tak, že spojíme
+vrcholy $x$ a $v$ a vrcholy $y$ a $u$ (resp. opačne), tak aby sme opäť dostali uzavretú cestu.
+Teraz už len potrebujeme dokázať, že úsečka s požadovanou vlastnosťou existuje.
+
+Ukážeme to pre prvý prípad, ostatné sú obdobné. 
+Nech $(x, a)$ a $(y, b)$ sú zakázané dvojice pre body $x, y$ iné ako $(x,y)$. 
+Zoberme si postupne najbližších susedov $M_i^{'}$. Pre suseda $M^{'}_j$ sa pozrime na najbližší vrchol na
+ceste $P_j$ (resp. $P_{j+1}$), ktorá tam končí (predpokladáme, že táto cesta má aspoň jeden vrchol, ináč by sme počet
+pretnutí úsečky vedeli znížiť iným spôsobom). Tento vrchol označme $z$. Bod $M^{'}_j$ leží teda
+medzi vrcholom $z$ a nejakým iným vrcholom $z^{'}$.  
+
+Našim cieľom je nájsť $M_j^{'}$ také, že $z$ a $z^{'}$ sú iné ako $x, y, a, b$. Každý vrchol sa môže
+vyskytnúť ako najbližší vrchol dvakrát. Navyše sa každý z nich môže dva krát vyskytnúť ako sused
+najbližšieho vrchola. To znamená, že potrebujeme prešetriť aspoň 17 bodov $M_j^{'}$.
+Aby sme sa vyhli zavádzaniu ďalších pretnutí úsečky $S$ nebudeme sa pozerať na body $M_t^{'}$ a
+$M_{t-1}^{'}$. To znamená, že ak máme $20$ rôznych bodov pretnutia, tak určite nájdeme nejaký vhodný bod.
+
+Úplne rovnakým spôsobom vieme vyriešiť druhý prípad. V treťom prípade je jediným problémom to, že
+nám vznikne navyše niekoľko pretnutí úsečky $S$, ale pre jedno odstránenie zakázanej dvojice vznikne
+maximálne jedno nové pretnutie. A takého zakázane dvojice búdu najviac $4$. 
+
+Takýmto spôsobom odstránime všetky zakázané dvojice. Ešte treba ukázať, že nezvýšime dĺžku cesty
+o viac ako konštatný násobok $s$. Keďže každý bod pripojíme v najhoršom prípade k $17$-tému
+najbližšiemu bodu, tak celkové predĺženie bude najviac $34s$ (lebo môžeme prepájať body na oboch
+stranách). 
+\end{dokaz}
