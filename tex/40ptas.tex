@@ -251,3 +251,37 @@ o viac ako konštatný násobok $s$. Keďže každý bod pripojíme v najhoršom
 najbližšiemu bodu, tak celkové predĺženie bude najviac $34s$ (lebo môžeme prepájať body na oboch
 stranách). 
 \end{dokaz}
+
+Zvyšok dôkazu je rovnaký ako v \cite{Arora} až na zmenu niekoľkých konštánt.
+TODO: možno ho tu napísať
+
+\section{Rýchlejší algoritmus}
+
+Počet stavou v doteraz popísanom algoritme najviac dvíhala nutnosť pamätať si, ktorý vrchol
+nasleduje za ktorým prechodom. Túto informáciu sme si pamätali preto, aby sme zabezpečili
+disjuktnosť ciest vtedy keď spájame informácie z jednotlivých synov štvorca v quad-tree.
+
+Disjuktnosť vieme zabezpečiť aj s menším počtom stavov.
+Stačí nám vedieť, že či za dvoma prechodmi portálmi leží rovnaký vrchol.
+Keď cesta pretne štvorec v portáli $a_i$, tak máme nasledovné možnosti:
+\begin{itemize}
+\item Cesta prechádza štvorcom bez toho, aby prešla cez nejaký vrchol.
+\item Cesta vojde do štvorca a prvý vrchol cez ktorý prejde je vrchol $v_i$.
+V tomto prípade môže existovať žiaden, jeden alebo dva portály -- $b_{i_1}, b_{i_2}$ --
+pre druhú cestu také, že druhá cesta po prejdení týmito portálmi vojde
+do vrchola $v_i$.
+\end{itemize}
+
+Pri spájaní podproblémov potom vieme overiť disjuktnosť práve na základe tejto informácie.
+
+Vstupy podproblému teda budú:
+\begin{itemize}
+\item Štvorec $S$ z posunutého quad-tree.
+\item Postupnosti portálov, ktoré majú cesty pretínať: $a_1, a_2, \dots, a_{2p}$, $b_1, b_2, \dots, b_{2q}$.
+\item Pre každé pretnutie portálu informácia o rovnakom vrchole za portálom, tak ako je uvedené
+vyššie.
+\end{itemize}
+
+Keď spočítame počet podproblémov, tak dostaneme. $O(n \lg n)$ štvorcov, $O(m^{O(r)})$
+postupnosti portálov a $O(r^{O(r)})$ možností ako môžu mať portály spoločné vrcholy.
+Celkovo máme teda aj časovú zložitosť $O(n (\lg n)^{O(c)} c^{O(c)})$. 
