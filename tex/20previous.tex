@@ -106,6 +106,40 @@ Za predpokladov:
 
 Spôsob riešenie je podobný ako pri riešení problému obchodného cestujúceho -- najprv
 nepoužijeme žiadne z podmienok \eqref{eq:subtour2}, \eqref{eq:subtour3} a postupne
-pridáme len porušené podmienky. 
+pridáme len porušené podmienky. V \cite{duchenne} sa tento algoritmus nazýva "3-index".
 
+Ukazuje sa, že tento algoritmus je pomerne pomalý a potrebuje veľa iterácií riešenia
+lineárneho programu. Pri praktickom testovaní na náhodných euklidovských grafoch
+je tento algoritmus úspešný maximálne pre grafy s $50$ vrcholmi. Hlavným problémom
+tohoto algoritmu je, že pomerne často nastáva taký prípad, keď len prehadzujeme hrany z $x$ 
+do $y$ a naopak. 
 
+\smallskip
+
+Ako lepší sa ukazuje algoritmus s nasledujúcou myšlienkou: Namiesto hľadania dvoch
+disjuktných hamiltonovských kružníc budeme hľadať najlacnejší 4-regulárny 4-súvislý podgraf.
+Následne ak sa tento podgraf dá rozložiť na dve hamiltonovské kružnice, tak máme riešenie.
+Ináč tento podgraf zakážeme a budeme hľadať najlacnejší nezakázaný podgraf.
+Iný pohľad na tento algoritmus je taký, že v lineárnom programe zlúčíne premenné $x_e$ a $y_e$ 
+do jednej, čiže aktuálny program, ktorý budeme nazývať 2-index vyzerá takto:
+
+$$\min \sum_{e \in E} c(e) x_e$$ 
+
+Za predpokladov:
+\begin{subequations}
+\begin{equation}\forall e \in E: x_e \in \{0, 1, 2\}\end{equation}
+\begin{equation}\forall v \in V: \sum_{e \in \delta(v)} x_e = 4\end{equation}
+\begin{equation}\forall S \subset V, S \neq \emptyset: \sum_{e \in \delta(S)} x_e \geq 4
+\label{eq:subtour4}
+\end{equation}
+\end{subequations}
+
+Aktuálne už hľadanie porušených podmienok \eqref{eq:subtour4} nie je také jednoduché.
+Nestačí už len hľadať komponenty vzniknutého grafu potrebujeme hľadať rezy, ktoré
+majú veľkosť menšiu ako 4. Na toto môžeme napríklad použiť algoritmus z \cite{stoer}. 
+
+Väčším problémom je zistenie, či sa dá 4-regulárný 4-súvislý podgraf rozdeliť na dve
+disjuktné hamiltonovské kružnice. Tento problém je NP-úplný ako ukázal \cite{hamdecomp}.
+V \cite{duchenne} na riešenie tohoto problému používajú upravený 3-index algoritmus.
+Takýto 2-index algoritmus funguje pre náhodné euklidovské grafy, ktoré majú menej ako $200$
+vrcholov.
