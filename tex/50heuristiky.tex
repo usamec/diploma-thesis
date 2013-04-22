@@ -1,0 +1,79 @@
+TODO poriadny nazov kapitoly
+
+V tejto časti popíšeme niekoľko algoritmov, ktoré sú pomerne úspešné
+na praktických inštanciách problému, ale väčšinou je ich teoretická
+analýza pomerne ťažká. Popíšeme niekoľko heuristík, ktoré v pomerne krátkom čase
+dávajú riešenie, ktoré je väčšinou blížko optimálneho. Aby sme vedeli odhadnúť
+kvalitu týchto heuristík, najprv ale ukážeme niekoľko algoritmov na hľadanie dolného odhadu
+veľkosti riešenia. Následne ešte vylepšíme algoritmus používajúci
+celočíselné lineárne programovanie od \cite{duchenne}, aby
+sme dokázali optimálne riešiť inštancie, ktoré majú najviac 400 vrcholov.
+
+\section{Dolné odhady veľkosti riešenia}
+
+\subsection{Odhad pomocou dvoch disjuktných kostier}
+
+Pomerne priamočiarym dolným odhadom veľkosti riešenia je veľkosť
+dvoch nakratších disjuktných kostier. My to jemne vylepšíme budeme používať
+tzv. 1-kostry.
+
+\begin{definicia}
+1-kostra v grafe $G=(V, E)$ je zjednotenie kostry na vrcholoch $V \setminus {1}$
+a dvoch hrán susedných s vrcholom $1$. 
+\end{definicia}
+
+\begin{lema}
+Veľkosť dvoch najlacnejších disjuktných 1-kostier je najviac tak veľká ako dĺžka
+riešenia problému dvoch obchodných cestujúcich.
+\end{lema}
+
+\begin{dokaz}
+Každá hamiltonovská kružnica je 1-kostra. Riešenie problému dvoch obchodných cestujúcich
+sú teda dve disjuktné 1-kostry.
+\end{dokaz}
+
+Dve najkratšie disjuktné 1-kostry môžeme hľadať pomocou algoritmu popísaného v
+\cite{spanning2} -- nájdeme najkratšie disjuktné kostry a k vrcholu $1$ ešte pridáme
+dve najkratšie hrany.
+
+Tento odhad sa dá vylepšiť pomocou techniky opísanej v \cite{heldtsp} a \cite{lower1}.
+Jej princíp je nasledovný. Každému vrcholu prirádíme potenciál 
+$p_i \in \mathbb{R}$.
+A zavedenieme nové dĺžky hrán:
+$$d(u, v) = c(u, v) + p_u + p_v$$
+
+\begin{lema}
+Majme potenciály $p_1, p_2, \dots, p_n$. Riešenie problému dvoch obchodných
+cestujúcich pri dĺžkach $d(u,v)$ definovaných vyššie je rovnaké ako riešenie
+problému dvoch obchodných cestujúcich pri dĺžkach $c(u,v)$.
+\end{lema}
+
+\begin{dokaz}
+Majme hamiltonovskú kružnicu $v_1, v_2, \dots, v_n$ s dĺžkou $C = c(v_1, v_2) + c(v_2, v_3) +
+\dots + c(v_n, v_1)$. Pokiaľ zavedieme dĺžky hrán $d(u,v)$ dostaneme cenu:
+$$C^{'} = c(v_1, v_2) + p_{v_1} + p_{v_2} + c(v_2, v_3) + p_{v_2} + p_{v_3} + \dots +
+c(v_n, v_1) + p_{v_n} + p_{v_1}$$
+$$C^{'} = C + 2 \sum_{v \in V} p_v$$
+
+To znamená, že ku dĺžke každej hamiltonovskej kružnice prirátame rovnaké číslo
+a teda najlepšie riešenie pri upravených dĺžkach je rovnaké ako najlepšie
+riešenie pri pôvodných dĺžkach.
+\end{dokaz}
+
+Podstatné je, že zmenou potenciálov vieme zmeniť najlacnejšie disjuktné 1-kostry. 
+Našim cieľom bude nájsť také potenciály, aby rozdiel medzi dĺžkou najlacnejších
+disjuktných 1-kostier a dĺžkou riešenia problému dvoch obchodných cestujúcich
+bol čo najmenší. Nech $C$ je dĺžka riešenia problému dvoch obchodných cestujúcich
+pri nulových potenciáloch. Nech $D$ je dĺžka dvoch najlacnejších disjuktných 1-kostier
+pri potenciáloch $p_1, \dots, p_n$. Potom spomínaný rozdiel vieme vyjadriť ako:
+$$C + 2 \sum_{v \in V} p_v - D$$
+
+V našom prípade je $C$ nám neznáma konštanta a teda stačí minimalizovať výraz:
+$$2 \sum_{v \in V} p_v - D$$
+
+Vhodné potenciály vieme nájsť napríklad pomocou subgradientovej optimalizácie.
+Dá sa totiť ukázať, že ak $d_v$ je súčet stupňov vrchola $v$ v obidvoch kostrách, tak
+vektor so zložkami $g_v = 4 - d_v$ je subgradient pre vyššie spomínaný optimalizačný
+problém.
+
+Na začiatku položíme všetky potenciály ako $p^{(0)}_i = 0$.
