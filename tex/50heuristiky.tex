@@ -72,8 +72,49 @@ V našom prípade je $C$ nám neznáma konštanta a teda stačí minimalizovať 
 $$2 \sum_{v \in V} p_v - D$$
 
 Vhodné potenciály vieme nájsť napríklad pomocou subgradientovej optimalizácie.
-Dá sa totiť ukázať, že ak $d_v$ je súčet stupňov vrchola $v$ v obidvoch kostrách, tak
+Dá sa totiž ukázať, že ak $d_v$ je súčet stupňov vrchola $v$ v obidvoch kostrách, tak
 vektor so zložkami $g_v = 4 - d_v$ je subgradient pre vyššie spomínaný optimalizačný
 problém.
 
-Na začiatku položíme všetky potenciály ako $p^{(0)}_i = 0$.
+Algoritmus optimalizácie sa dá popísať nasledovne. Na začiatku položíme všetky potenciály
+ako $p^{(0)}_v = 0$. V $i$-tej iterácii si najprv zvolíme veľkosť kroku $t^{(i)}$. Následne
+spočítame subgradienty $g^{(i)}_v = 4 - d^{(i-1)}_v$ a následne vyrátame nové potenciály ako:
+$p^{(i)}_v = p^{(i-1)}_v + t^{(i)} g^{(i)}_v$. V našej implementácii sme $t^{(i)}$ volili ako
+konštantu a iterácie opakovali dovtedy, kým sa výsledok zlepšoval.
+
+\subsection{Dolný odhad pomocou štyroch najbližších susedov}
+
+Ešte ukážeme jeden dolný odhad, ktorý je o trochu rýchlejší ako odhad pomocou kostier a navyše má
+niektoré príjemné vlastnosti, ktoré sa ukážu neskôr.
+
+\begin{definicia}
+Daný je ohodnotený graf $G = (V, E)$. Graf $k$ najbližších susedov $G_s = (V, E)$ je orientovaný
+graf taký, že z každého vrchola $v \in V$ vychádza $k$ najkratších hrán, ktoré s vrcholom $v$
+susedia v $G$. 
+\end{definicia}
+
+\begin{lema}
+Nech $s$ je celková dĺžka hrán v grafe $4$ najbližších susedov, nech $f$ je dĺžka najlacnejšieho
+$4$-faktora a $t$ je dĺžka riešenia problému dvoch obchodných cestujúcich. Potom:
+$$ \frac{1}{2} s \leq f \leq t$$
+\end{lema}
+
+\begin{dokaz}
+Druhá nerovnosť vyplýva z toho, že dve hamiltonovské kružnice tvoria dokopy 4-faktor.
+Prvá nerovnosť vyplýva z toho, že keď z každej hrany 4-faktoru spravíme dve orientované hrany, tak
+dostaneme graf v ktorom z každého vrchola vychádzajú práve 4 hrany.
+\end{dokaz}
+
+My budeme hľadať graf $4$ najbližších susedov. Vieme ho nájsť pomerne priamočiaro v čase lineárnom
+od počtu hrán. Opäť môžeme použiť aj transformáciu pomocou potenciálou. Cieľom je tento krát
+dostať hodnotu $s/2$ čo najbližšie k hodnote $f$ (keďže najlacnejší 4-faktor sa pri zmene
+potenciálov nezmení). Celý postup subgradientovej optimalizácie je rovnaký ako pri disjuktných
+1-kostrách.
+
+\begin{poznamka}
+Vedeli by sme aj priamo hľadať najlacnejší $4$-faktor prevedením na hľadanie najlacnejšieho
+$1$-faktora v správne pozmenenom grafe. Výhoda nášho prístupu sa ukáže neskôr, keď budeme
+vyhľadávať hrany, ktoré sú zaručene nepoužiteľné.
+\end{poznamka}
+
+
