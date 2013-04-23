@@ -32,7 +32,7 @@ Každá hamiltonovská kružnica je 1-kostra. Riešenie problému dvoch obchodn�
 sú teda dve disjuktné 1-kostry.
 \end{dokaz}
 
-Dve najkratšie disjuktné 1-kostry môžeme hľadať pomocou algoritmu popísaného v
+Dve najkratšie disjuktné 1-kostry môžeme hľadať v čase $O(m \lg m + n^2)$ pomocou algoritmu popísaného v
 \cite{spanning2} -- nájdeme najkratšie disjuktné kostry a k vrcholu $1$ ešte pridáme
 dve najkratšie hrany.
 
@@ -114,7 +114,46 @@ potenciálov nezmení). Celý postup subgradientovej optimalizácie je rovnaký 
 \begin{poznamka}
 Vedeli by sme aj priamo hľadať najlacnejší $4$-faktor prevedením na hľadanie najlacnejšieho
 $1$-faktora v správne pozmenenom grafe. Výhoda nášho prístupu sa ukáže neskôr, keď budeme
-vyhľadávať hrany, ktoré sú zaručene nepoužiteľné.
+vyhľadávať hrany, ktoré zaručene nepoužijeme v optimálnom riešení.
 \end{poznamka}
 
+\section{Heuristiky na hľadanie horného odhadu veľkosti riešenia}
+
+Na hľadanie horného odhadu veľkosti riešenia použijeme upravenú Lin-Kernighanovu heuristiku pre
+problém obchodného cestujúceho (\cite{link}). Táto heuristika postupne vylepšuje nájdené
+riešenie pomocou lokálnych zmien. V každom kroku vyberie množinu $k$ hrán $X$, ktoré z aktuálneho
+riešenia odstráni a množinu $k$ hrán $Y$, ktorú do riešenia pridá. Tejto operácii sa zvykne
+hovoriť aj $k$-opt krok, v našej implementácii budeme používať $k$ maximálne 5.
+Lin-Kernighanova heuristika kladie na tieto množiny ešte niekoľko obmedzení:
+
+\begin{itemize}
+\item Hrany z $X \cup Y$ musia tvoriť cyklus. Kroku, ktorých spĺňa túto podmienku
+hovoríme aj sekvenčný $k$-opt krok. Na tomto cykle sa striedavo budú vyskytovať hrany z množín
+$X$ a $Y$.
+\item Hrany z $Y$ musia byť podmnožinou tzv. množiny kandidátov. Množina kandidátov je množina hrán,
+o ktorej predpokladáme, že väčšina z hrán riešenia bude práve z nej. Obvykle je množina kandidátov
+tvorená tak, že pre každý vrchol zoberieme $m$ najkratších hrán, ktoré s ním susedia. V našej
+implementácii sme položili $m = 8$.
+\end{itemize}
+
+TODO obrázok
+
+Sekvenčné $k$-opt kroky vieme hľadať priamočiaro pomocou rekurzie -- v každom kroku si vyberieme,
+ktorú hranu pridáme do množiny $X$ alebo $Y$ (postupujeme striedavo), začíname najprv množinou $X$.
+Po pridaní hrany do množiny $X$ skúsime uzavrieť cyklus (ignorujeme, či hrana, ktorá uzavrie
+cyklus je z množiny kandidátov). A skontrolujeme, či po takomto ťahu dostaneme stále hamiltonovskú
+kružnicu a či jej dĺžka bude kratšia. V momente, keď nájdeme vhodný ťah aplikujeme ho -- t.j.
+nehľadáme najlepší $k$-opt ťah.
+
+Zároveň si pri rekurzii počítame doterajší zisk, t.j. rozdiel medzi dĺžkou odobraných a pridaných hrán.
+Pokiaľ chceme, aby náš $k$-opt krok bol dobrý, tak jeho zisk musí byť kladný. My použijeme ešte
+agresívnejšie orezanie -- požadujeme, aby po každom kroku rekurzie sme malý kladný zisk. Toto vôbec
+neobmedzí prehľadané kroky, lebo ak máme celkovo kladný zisk, tak vieme cyklus prejsť v takom
+poradí, aby bol zisk po každom kroku kladný.
+
+\medskip
+
+V našom prípade máme hamiltonovské kružnice dve. Priamočiara implementácia by mohla pre každý
+$k$-opt ťah kontrolovať, či neporuší podmienku disjuktnosti ciest a povoliť len tie, ktoré ju
+neporušujú.
 
