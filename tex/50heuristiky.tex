@@ -280,7 +280,8 @@ $v_1$ a v konštantom čase prejdeme všetky jeho kombinácie susedov.
 Predstavme si graf, ktorého vrcholy zodpovedajú bodom v rovine. Pomerne intuitívne vieme označiť
 veľa hrán, o ktorých si sme istý, že v optimálnom riešení určite nebudú -- sú to hlavne tie hrany,
 ktoré vedú cez celú rovinu. My by sme v tejto časti chceli ukázať ako tieto hrany
-hľadať algoritmicky.
+hľadať algoritmicky. Pokiaľ by sme ich vedeli hľadať, môžeme obmedziť počet premenných, ktoré
+sú v lineárnom programe a tak urýchliť jeho riešenie.
 
 \begin{lema}
 Nech $l(G, e)$ je dolný odhad veľkosti riešenia, ktoré obsahuje hranu $e$.
@@ -292,4 +293,61 @@ optimálnom riešení.
 Triviálny.
 \end{dokaz}
 
+Ako získať horný odhad veľkosti riešenia sme už popísali. Ešte potrebujeme popísať ako získať dolný
+odhad, ktorý obsahuje hranu $e$.
 
+\medskip
+Pokiaľ používame dolný odhad pomocou štyroch najbližších susedov, tak sa dolný odhad, ktorý obsahuje
+hranu $e$ dá získať pomerne jednoducho. Nech $e$ vedie medzi vrcholmi $x, y$. Potom do veľkosti
+dolného odhadu miesto $4$ najbližších susedov započítame iba $3$ najbližších susedov (okrem hrany
+$e$) a navyše hranu $e$ započítame $2-krát$. Pokiaľ máme už dopredu spočítaný dolný odhad bez nutnej
+hrany, tak pre danú hranu $e$ vieme tento odhad prerátať v konštantnom čase. 
+To znamená, že v čase $O(n^2)$ vieme nájsť nepoužiteľné hrany. 
+
+\medskip
+Pokiaľ používame dolný odhad pomocou dvoch disjuktných kostier, tak je situácia trochu zložitejšia.
+Pokiaľ máme spočítané najlacnejšie dve disjuktné kostry a chceme, aby sa nutne použila hrana $e$,
+tak potrebujeme z týchto kostier jednu hranu vyhodiť. Nestačí sa ale len pozrieť na cykly v ktorých
+leží hrana $e$, lebo môžeme si hrany medzi kostrami presúvať. To znamená, že vložime hranu $e$, inú
+hranu $e_1$ presunieme z kostry $M_1$ do kostry $M_2$ ($e$ a $e_1$ ležali po pridaní do $M_1$ na
+jednom cykle), ďalšiu hranu $e_2$ presunieme z $M_2$ do $M_1$, atď., až nakoniec odstraníme hranu
+$e_k$. Teda hľadáme cestu medzi hranami kostier a chceme vyhodiť najlacnejšiu hranu, ku ktorej sa
+vieme dostať. Tento problém efektívne rieši značkovacia procedúra z \cite{spanning2}, akurát si
+potrebujeme pamätať akú najlacnejšiu hranu vieme dosiahnúť. Táto značkovacia procedúra trvá pre
+jednu hranu čas $O(n)$. Následne keď zistíme, ktorú hranu musíme z kostier vyhodiť, tak
+veľkosti dolného odhadu vieme prerátať triválne. Celkovo na to, aby sme o každej hrane zistili či
+je zbytočná potrebujeme čas $O(n^3)$. 
+
+\begin{poznamka}
+Dobre spravený algoritmus by toto vedel riešiť aj v čase $O(n^2)$. Keďže ale vo všetkých
+naších vstupoch platí $n \leq 500$, tak je $O(n^3)$ riešenie postačujúce a nepotrebujeme sa zaoberať
+komplikovanejším riešením.
+\end{poznamka}
+
+\section{Experimenty}
+
+Vyššie popísané algoritmy sme implementovali s cieľom empiricky overiť ich účinnosť na
+niektorých druhoch dát. Testovacie dáta budú tvoriť náhodné grafy v euklidovskej rovine (kde
+súradnice bodov sú vyberané rovnomerne náhodne) a niektoré inštancie z TSPLIB (\cite{tsplib}).
+
+Hľadanie dolných a horných odhadov sme implementovali v C++. Na riešenie celočíselných
+lineárnych programov sme použili Numberjack, ktorý používa SCIP a ako SAT solver sme použili knižnicu STP, ktorá
+používa MINISAT. Réžiu okolo celočíselných lineárnych programov a SAT solvera sme
+implementovali v jazyku Python. 
+
+Testovali sme tri rôzne implementácie. Jedna nepoužívala žiadne vyhadzovanie nepotrebných
+hrán, druhá používala vyhadzovanie nepotrebných hrán cez štyroch najbližších susedov a tretia
+používala vyhadzovanie nepotrebných hrán pomocou dvoch disjuktných kostier.
+
+V prípade náhodných grafov v euklidovskej rovine sme generovali grafy veľkosti $100, 150, 200, 250,
+300$. Pre každú veľkosť sme vygenerovali 10 grafov.
+Následne sme každú našu implementáciu pustili a sledovali niekoľko údajov:
+\begin{itemize}
+\item Či úspešne skončí do jednej hodiny. Ak neskončí, tak rátame riešenie za neúspešné.
+\item Ako rýchlo skončí.
+\item Koľko krát sa vykoná rozklad 4-súvislého 4-faktora na dve hamiltonovské kružnice.
+\item Koľko hrán bolo označených ako nepoužiteľné.
+\end{itemize}
+
+V prípade, že sme používali odhady, sme navyše počítali aj relatívne rozdiely
+medzi dolným a horným odhadom, resp. medzi odhadmi a optimálnym riešením.
