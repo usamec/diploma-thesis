@@ -177,4 +177,119 @@ dostať tak, že spravíme niekoľko krokov, ktoré jednu cestu zlepšia a súce
 $1\%$. A následne sa opäť snazíme znižovať celkovú dĺžku. Algoritmus skončí vtedy, keď sa už ani
 po takýchto krokoch nepodarí riešenie zlepšiť.
 
+\section{Riešenia pomocou celočíselného lineárneho programovania}
+
+Naše riešenie vychádza z riešenia od \cite{duchenne}, ktoré sme stručne opísali v druhej kapitole.
+Pripomeňme, že hlavnou myšlienkou tohoto riešenia je hľadať 4-súvislý 4-faktor, ktorý sa následne
+pokúšeme rozdeliť na dve hamiltonovské kružnice. Pokiaľ sa toto rozdelenie nepodarí, daný 4-faktor
+zakážeme a hľadáme ďalší.
+
+My toto riešenie vylepšíme pomocou niekoľkých vecí.
+
+\subsection{Rozdeľovanie 4-súvislého 4-faktora pomocou SAT solvera}
+
+Ako sme už spomínali zistiť, či sa dá rozdeliť 4-súvislý 4-faktor na dve hamiltonovské kružnice
+je NP-úplný problém. Pôvodné riešenie tento problém rieši pomocou celočíselného lineárneho programu.
+Keďže ale tento problém je rozhodovací a nie optimalizačný, nám sa zdá rozumnejšie tento 
+problém riešiť pomocou SAT solvera. Technika riešenia bude takmer podobná ostatným.
+Na začiatku budeme požadovať iba rozklad na dva 2-faktory (t.j. rozložíme hrany do dvoch množín $A,
+B$ tak, aby každý vrchol mal dve susedné hrany z $A$ a dve susedné hrany z $B$). Pokiaľ sa vyskytne
+nejaký cyklus $C$, ktorý neprechádza celým grafom, tak tento cyklus zakážeme (t.j. budeme požadovať
+výskyť aspoň jednej hrany medzi množinami $C$ a $V \setminus C$). 
+
+\subsection{Zrýchlenie rozdeľovania pomocou hľadania vhodných podgrafov}
+
+Už \cite{duchenne} ukázal jeden spôsob ako zrýchliť rozhodovanie, či sa dá 4-súvislý 4-faktor
+rozdeliť na dve hamiltonovské kružnice.
+
+\begin{definicia}
+Artikulačný pár v 4-súvislom 4-regulárnom grafe $G = (V, E)$ 
+je dvojica vrcholov $v_1, v_2$ také, že keď z grafu odstránime
+tieto vrcholy a ich susediace hrany, tak sa graf rozpadne na dva grafy
+$G_1, G_2$.
+\end{definicia}
+
+Artikulačné páry vieme triviálne hľadať v čase $O(n^3)$.
+
+Pokiaľ nájdeme v grafe $G$ artikulačný pár $v_1, v_2$ môžeme ho rozdeliť pomocou nasledovnej
+dekompozície:
+Nech sa po odstránení vrcholov $v_1, v_2$ graf rozpadne na dva grafy $G_1, G_2$.
+Graf $G_1^{'}$ vytvoríme z $G_1$ tak, že mu pridáme vrcholy $v_1, v_2$ a všetky hrany, ktoré spajáli
+vrcholy $v_1, v_2$ s grafom $G_1$ v grafe $G$. Následne ešte spojíme vrcholy $v_1, v_2$ medzi sebou
+pomocou dvoch hrán. Obdobne vyrobíme z grafu $G_2$ graf $G_2^{'}$.
+
+TODO obrazok
+
+Grafy $G_1^{'}, G_2^{'}$ budú 4-súvislé a 4-regulárne. Navyše o nich platí nasledovné.
+
+\begin{veta}
+Nech $G$ je 4-súvislý 4-regulárny graf, ktorý obsahuje artikulačný pár $v_1, v_2$.
+Nech $G_1^{'}, G_1^{'}$ sú grafy, ktoré vznikli dekompozíciou popísanou vyššie.
+Graf $G$ sa dá rozložiť na dve hamiltonovské kružnice práve vtedy a len vtedy, keď
+sa grafy $G_1^{'}$ a $G_2^{'}$ dajú rozložiť na dve hamiltonovské kružnice.
+\end{veta}
+
+\begin{dokaz}
+Pozri \cite{duchenne}.
+\end{dokaz}
+
+Túto techniku môžeme aplikovať rekurzívne. Navyše pokiaľ sme spravili iba jednu dekompozíciu, tak
+môžeme zakázať menšiu časť grafu ako celý. T.j. ak sa nepodarí daný graf $G$ rozložiť na dve
+hamiltonovské kružnice, preto, lebo graf $G_1^{'}$ sa nepodarilo rozložiť, tak môžeme miesto podmienky:
+$$\sum_{e \in G} x_e \leq 2n - 1$$
+
+Použiť podmienku:
+$$\sum_{e \in G_1^{'}} x_e \leq |E_1^{'}| - 1$$
+
+Táto technika ale nefunguje rekurzívne, ale iba pri prvej dekompozícii.
+
+\medskip
+
+V našom algoritme používame ešte jednu operáciu, ktorá vstup pre SAT solver ešte zjednoduší.
+Myšlienka vyzerá nasledovne: Ak nájdeme nejakú štvorcu bodov, ktoré sú všetky navzájom spojené, tak
+ich môžeme zlučiť do jedného bodu.
+
+\begin{veta}
+Nech $G$ je 4-súvislý 4-regulárny graf a nech $v_1, v_2, v_3, v_4$ sú jeho vrcholy také, že medzi
+každými dvoma vedie hrana. Nech graf $G^{'}$ vznikne z grafu $G$ tak, že vrcholy $v_1, v_2, v_3,
+v_4$ zlúčime do jedného. Potom graf $G$ je rozložiteľný na dve hamiltonovské kružnice práve vtedy a
+len vtedy, keď je graf $G^{'}$ rozložiteľný na dve hamiltonovské kružnice.
+\end{veta}
+
+\begin{dokaz}
+Zoberme hrany, ktoré vedú medzi množinami $V_x = \{v_1, v_2, v_3, v_4\}$ a $V \setminus V_x$.
+Takéto hrany sú práve 4. Ak by ich bolo menej, tak $G$ nie je 4-súvislý, ak by ich bolo viac, tak
+$G$ nemôže byť 4-regulárny.
+
+Ak sa graf $G$ dá rozložiť na dve hamiltonovské kružnice, tak triviálne vidno, že aj graf $G^{'}$ sa
+dá rozložiť (kružnice budú presne rovnaké akuráť vynecháme hrany medzi vrcholmi $v_1, \dots, v_4$).
+
+TODO obrázok
+
+Ak sa graf $G^{'}$ dá rozložiť na dve hamiltonovské kružnice, tak pomocou vhodného prepojenia (viď.
+obrázok) medzi
+vrcholmi $v_1, \dots, v_4$ vieme graf $G$ rozložiť na dve hamiltonovské kružnice (ostatné hrany
+rozložíme medzi kružnice rovnako ako v grafe $G^{'}$).
+\end{dokaz}
+
+Poznamenajme, že takéto štvorice vrcholov vieme hľadať v čase $O(n)$ -- vyberieme si jeden vrchol
+$v_1$ a v konštantom čase prejdeme všetky jeho kombinácie susedov.
+
+\subsection{Odstráňovanie nepoužiteľných hran}
+
+Predstavme si graf, ktorého vrcholy zodpovedajú bodom v rovine. Pomerne intuitívne vieme označiť
+veľa hrán, o ktorých si sme istý, že v optimálnom riešení určite nebudú -- sú to hlavne tie hrany,
+ktoré vedú cez celú rovinu. My by sme v tejto časti chceli ukázať ako tieto hrany
+hľadať algoritmicky.
+
+\begin{lema}
+Nech $l(G, e)$ je dolný odhad veľkosti riešenia, ktoré obsahuje hranu $e$.
+Nech $u(G)$ je nejaký horný odhad riešenia. Ak $l(G, e) > u(G)$, tak sa hrana $e$ určite nepoužije v
+optimálnom riešení.
+\end{lema}
+
+\begin{dokaz}
+Triviálny.
+\end{dokaz}
+
 
