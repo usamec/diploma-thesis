@@ -18,7 +18,7 @@ dvoch nakratších disjuktných kostier. My to jemne vylepšíme budeme použív
 tzv. 1-kostry.
 
 \begin{definicia}
-1-kostra v grafe $G=(V, E)$ je zjednotenie kostry na vrcholoch $V \setminus {1}$
+1-kostra v grafe $G=(V, E)$ je zjednotenie kostry na vrcholoch $V \setminus \{1\}$
 a dvoch hrán susedných s vrcholom $1$. 
 \end{definicia}
 
@@ -33,8 +33,8 @@ sú teda dve disjuktné 1-kostry.
 \end{dokaz}
 
 Dve najkratšie disjuktné 1-kostry môžeme hľadať v čase $O(m \lg m + n^2)$ pomocou algoritmu popísaného v
-\cite{spanning2} -- nájdeme najkratšie disjuktné kostry a k vrcholu $1$ ešte pridáme
-dve najkratšie hrany.
+\cite{spanning2} -- nájdeme najkratšie disjuktné kostry na $V \setminus \{1\}$ a k vrcholu $1$ ešte
+pridáme štyri najkratšie hrany.
 
 Tento odhad sa dá vylepšiť pomocou techniky opísanej v \cite{heldtsp} a \cite{lower1}.
 Jej princíp je nasledovný. Každému vrcholu prirádíme potenciál 
@@ -156,4 +156,25 @@ poradí, aby bol zisk po každom kroku kladný.
 V našom prípade máme hamiltonovské kružnice dve. Priamočiara implementácia by mohla pre každý
 $k$-opt ťah kontrolovať, či neporuší podmienku disjuktnosti ciest a povoliť len tie, ktoré ju
 neporušujú.
+
+Naše kroky budú mierne komplikovanejšie. Algoritmus na ich nájdenie by sa dal popísať nasledovne:
+\begin{enumerate}
+\item Nájdi $k$-opt krok v jeden z kružníc, ktorý túto kružnicu zlepší. Nech tento krok vymaže hrany
+z množiny $X$ a pridá hrany z množiny $Y$.
+\item Ak sa žiadna hrana z množiny $Y$ nenachádza v druhej kružnici, vykonaj tento krok.
+\item Ak má prienik druhej kružnice a $Y$ veľkosť 1, tak nájdi v druhej kružnici najlacnejší $2$-opt
+alebo $3$-opt krok, ktorý obsahuje túto hranu. Ak sa po vykonaní týchto krokov zlepší súčet dĺžok
+kružníc, vykonaj tieto kroky.
+\item V prípade, že má tento prienik veľkosť viac ako $1$, označme hrany v prieniku ako $e_1, \dots,
+e_k$. Tieto hrany nám druhú kružnicu rozdelia na niekoľko ciest. Vyskúšame všetky možnosti ako tieto
+cesty pospájať bez toho, aby sme použili hrany $e_1, \dots, e_k$ a vyberieme najlacnejšiu. Ak sa po
+vykonaní týchto krokov zlepší súčet dĺžkov kružníc vykonaj tieto krokov.
+\item Ináč nájdi iný $k$-opt krok v prvej kružnici.
+\end{enumerate}
+
+Tieto kroky opakujeme kým sa riešenie nedá zlepšiť. Pokiaľ sa zasekneme v lokálnom optime, tak sa pokúsime 
+dostať tak, že spravíme niekoľko krokov, ktoré jednu cestu zlepšia a súcet nezhoršia o viac ako
+$1\%$. A následne sa opäť snazíme znižovať celkovú dĺžku. Algoritmus skončí vtedy, keď sa už ani
+po takýchto krokoch nepodarí riešenie zlepšiť.
+
 
