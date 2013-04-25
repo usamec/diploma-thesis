@@ -1,129 +1,129 @@
-  TODO poriadny nazov kapitoly
+TODO poriadny nazov kapitoly
 
-  V tejto časti popíšeme niekoľko algoritmov, ktoré sú pomerne úspešné
-  na praktických inštanciách problému, ale väčšinou je ich teoretická
-  analýza pomerne ťažká. Popíšeme niekoľko heuristík, ktoré v pomerne krátkom čase
-  dávajú riešenie, ktoré je väčšinou blížko optimálneho. Aby sme vedeli odhadnúť
-  kvalitu týchto heuristík, najprv ale ukážeme niekoľko algoritmov na hľadanie dolného odhadu
-  veľkosti riešenia. Následne ešte vylepšíme algoritmus používajúci
-  celočíselné lineárne programovanie od \cite{duchenne}, aby
-  sme dokázali optimálne riešiť inštancie, ktoré majú najviac 400 vrcholov.
+V tejto časti popíšeme niekoľko algoritmov, ktoré sú pomerne úspešné
+na praktických inštanciách problému, ale väčšinou je ich teoretická
+analýza pomerne ťažká. Popíšeme niekoľko heuristík, ktoré v pomerne krátkom čase
+dávajú riešenie, ktoré je väčšinou blížko optimálneho. Aby sme vedeli odhadnúť
+kvalitu týchto heuristík, najprv ale ukážeme niekoľko algoritmov na hľadanie dolného odhadu
+veľkosti riešenia. Následne ešte vylepšíme algoritmus používajúci
+celočíselné lineárne programovanie od \cite{duchenne}, aby
+sme dokázali optimálne riešiť inštancie, ktoré majú najviac 400 vrcholov.
 
-  \section{Dolné odhady veľkosti riešenia}
+\section{Dolné odhady veľkosti riešenia}
 
-  \subsection{Odhad pomocou dvoch disjuktných kostier}
+\subsection{Odhad pomocou dvoch disjuktných kostier}
 
-  Pomerne priamočiarym dolným odhadom veľkosti riešenia je veľkosť
-  dvoch nakratších disjuktných kostier. My to jemne vylepšíme budeme používať
-  tzv. 1-kostry.
+Pomerne priamočiarym dolným odhadom veľkosti riešenia je veľkosť
+dvoch nakratších disjuktných kostier. My to jemne vylepšíme budeme používať
+tzv. 1-kostry.
 
-  \begin{definicia}
-  1-kostra v grafe $G=(V, E)$ je zjednotenie kostry na vrcholoch $V \setminus \{1\}$
-  a dvoch hrán susedných s vrcholom $1$. 
-  \end{definicia}
+\begin{definicia}
+1-kostra v grafe $G=(V, E)$ je zjednotenie kostry na vrcholoch $V \setminus \{1\}$
+a dvoch hrán susedných s vrcholom $1$. 
+\end{definicia}
 
-  \begin{lema}
-  Veľkosť dvoch najlacnejších disjuktných 1-kostier je najviac tak veľká ako dĺžka
-  riešenia problému dvoch obchodných cestujúcich.
-  \end{lema}
+\begin{lema}
+Veľkosť dvoch najlacnejších disjuktných 1-kostier je najviac tak veľká ako dĺžka
+riešenia problému dvoch obchodných cestujúcich.
+\end{lema}
 
-  \begin{dokaz}
-  Každá hamiltonovská kružnica je 1-kostra. Riešenie problému dvoch obchodných cestujúcich
-  sú teda dve disjuktné 1-kostry.
-  \end{dokaz}
+\begin{dokaz}
+Každá hamiltonovská kružnica je 1-kostra. Riešenie problému dvoch obchodných cestujúcich
+sú teda dve disjuktné 1-kostry.
+\end{dokaz}
 
-  Dve najkratšie disjuktné 1-kostry môžeme hľadať v čase $O(m \lg m + n^2)$ pomocou algoritmu popísaného v
-  \cite{spanning2} -- nájdeme najkratšie disjuktné kostry na $V \setminus \{1\}$ a k vrcholu $1$ ešte
-  pridáme štyri najkratšie hrany.
+Dve najkratšie disjuktné 1-kostry môžeme hľadať v čase $O(m \lg m + n^2)$ pomocou algoritmu popísaného v
+\cite{spanning2} -- nájdeme najkratšie disjuktné kostry na $V \setminus \{1\}$ a k vrcholu $1$ ešte
+pridáme štyri najkratšie hrany.
 
-  Tento odhad sa dá vylepšiť pomocou techniky opísanej v \cite{heldtsp} a \cite{lower1}.
-  Jej princíp je nasledovný. Každému vrcholu prirádíme potenciál 
-  $p_i \in \mathbb{R}$.
-  A zavedenieme nové dĺžky hrán:
-  $$d(u, v) = c(u, v) + p_u + p_v$$
+Tento odhad sa dá vylepšiť pomocou techniky opísanej v \cite{heldtsp} a \cite{lower1}.
+Jej princíp je nasledovný. Každému vrcholu prirádíme potenciál 
+$p_i \in \mathbb{R}$.
+A zavedenieme nové dĺžky hrán:
+$$d(u, v) = c(u, v) + p_u + p_v$$
 
-  \begin{lema}
-  Majme potenciály $p_1, p_2, \dots, p_n$. Riešenie problému dvoch obchodných
-  cestujúcich pri dĺžkach $d(u,v)$ definovaných vyššie je rovnaké ako riešenie
-  problému dvoch obchodných cestujúcich pri dĺžkach $c(u,v)$.
-  \end{lema}
+\begin{lema}
+Majme potenciály $p_1, p_2, \dots, p_n$. Riešenie problému dvoch obchodných
+cestujúcich pri dĺžkach $d(u,v)$ definovaných vyššie je rovnaké ako riešenie
+problému dvoch obchodných cestujúcich pri dĺžkach $c(u,v)$.
+\end{lema}
 
-  \begin{dokaz}
-  Majme hamiltonovskú kružnicu $v_1, v_2, \dots, v_n$ s dĺžkou $C = c(v_1, v_2) + c(v_2, v_3) +
-  \dots + c(v_n, v_1)$. Pokiaľ zavedieme dĺžky hrán $d(u,v)$ dostaneme cenu:
-  $$C^{'} = c(v_1, v_2) + p_{v_1} + p_{v_2} + c(v_2, v_3) + p_{v_2} + p_{v_3} + \dots +
-  c(v_n, v_1) + p_{v_n} + p_{v_1}$$
-  $$C^{'} = C + 2 \sum_{v \in V} p_v$$
+\begin{dokaz}
+Majme hamiltonovskú kružnicu $v_1, v_2, \dots, v_n$ s dĺžkou $C = c(v_1, v_2) + c(v_2, v_3) +
+\dots + c(v_n, v_1)$. Pokiaľ zavedieme dĺžky hrán $d(u,v)$ dostaneme cenu:
+$$C^{'} = c(v_1, v_2) + p_{v_1} + p_{v_2} + c(v_2, v_3) + p_{v_2} + p_{v_3} + \dots +
+c(v_n, v_1) + p_{v_n} + p_{v_1}$$
+$$C^{'} = C + 2 \sum_{v \in V} p_v$$
 
-  To znamená, že ku dĺžke každej hamiltonovskej kružnice prirátame rovnaké číslo
-  a teda najlepšie riešenie pri upravených dĺžkach je rovnaké ako najlepšie
-  riešenie pri pôvodných dĺžkach.
-  \end{dokaz}
+To znamená, že ku dĺžke každej hamiltonovskej kružnice prirátame rovnaké číslo
+a teda najlepšie riešenie pri upravených dĺžkach je rovnaké ako najlepšie
+riešenie pri pôvodných dĺžkach.
+\end{dokaz}
 
-  Podstatné je, že zmenou potenciálov vieme zmeniť najlacnejšie disjuktné 1-kostry. 
-  Našim cieľom bude nájsť také potenciály, aby rozdiel medzi dĺžkou najlacnejších
-  disjuktných 1-kostier a dĺžkou riešenia problému dvoch obchodných cestujúcich
-  bol čo najmenší. Nech $C$ je dĺžka riešenia problému dvoch obchodných cestujúcich
-  pri nulových potenciáloch. Nech $D$ je dĺžka dvoch najlacnejších disjuktných 1-kostier
-  pri potenciáloch $p_1, \dots, p_n$. Potom spomínaný rozdiel vieme vyjadriť ako:
-  $$C + 2 \sum_{v \in V} p_v - D$$
+Podstatné je, že zmenou potenciálov vieme zmeniť najlacnejšie disjuktné 1-kostry. 
+Našim cieľom bude nájsť také potenciály, aby rozdiel medzi dĺžkou najlacnejších
+disjuktných 1-kostier a dĺžkou riešenia problému dvoch obchodných cestujúcich
+bol čo najmenší. Nech $C$ je dĺžka riešenia problému dvoch obchodných cestujúcich
+pri nulových potenciáloch. Nech $D$ je dĺžka dvoch najlacnejších disjuktných 1-kostier
+pri potenciáloch $p_1, \dots, p_n$. Potom spomínaný rozdiel vieme vyjadriť ako:
+$$C + 2 \sum_{v \in V} p_v - D$$
 
-  V našom prípade je $C$ nám neznáma konštanta a teda stačí minimalizovať výraz:
-  $$2 \sum_{v \in V} p_v - D$$
+V našom prípade je $C$ nám neznáma konštanta a teda stačí minimalizovať výraz:
+$$2 \sum_{v \in V} p_v - D$$
 
-  Vhodné potenciály vieme nájsť napríklad pomocou subgradientovej optimalizácie.
-  Dá sa totiž ukázať, že ak $d_v$ je súčet stupňov vrchola $v$ v obidvoch kostrách, tak
-  vektor so zložkami $g_v = 4 - d_v$ je subgradient pre vyššie spomínaný optimalizačný
-  problém.
+Vhodné potenciály vieme nájsť napríklad pomocou subgradientovej optimalizácie.
+Dá sa totiž ukázať, že ak $d_v$ je súčet stupňov vrchola $v$ v obidvoch kostrách, tak
+vektor so zložkami $g_v = 4 - d_v$ je subgradient pre vyššie spomínaný optimalizačný
+problém.
 
-  Algoritmus optimalizácie sa dá popísať nasledovne. Na začiatku položíme všetky potenciály
-  ako $p^{(0)}_v = 0$. V $i$-tej iterácii si najprv zvolíme veľkosť kroku $t^{(i)}$. Následne
-  spočítame subgradienty $g^{(i)}_v = 4 - d^{(i-1)}_v$ a následne vyrátame nové potenciály ako:
-  $p^{(i)}_v = p^{(i-1)}_v + t^{(i)} g^{(i)}_v$. V našej implementácii sme $t^{(i)}$ volili ako
-  konštantu a iterácie opakovali dovtedy, kým sa výsledok zlepšoval.
+Algoritmus optimalizácie sa dá popísať nasledovne. Na začiatku položíme všetky potenciály
+ako $p^{(0)}_v = 0$. V $i$-tej iterácii si najprv zvolíme veľkosť kroku $t^{(i)}$. Následne
+spočítame subgradienty $g^{(i)}_v = 4 - d^{(i-1)}_v$ a následne vyrátame nové potenciály ako:
+$p^{(i)}_v = p^{(i-1)}_v + t^{(i)} g^{(i)}_v$. V našej implementácii sme $t^{(i)}$ volili ako
+konštantu a iterácie opakovali dovtedy, kým sa výsledok zlepšoval.
 
-  \subsection{Dolný odhad pomocou štyroch najbližších susedov}
+\subsection{Dolný odhad pomocou štyroch najbližších susedov}
 
-  Ešte ukážeme jeden dolný odhad, ktorý je o trochu rýchlejší ako odhad pomocou kostier a navyše má
-  niektoré príjemné vlastnosti, ktoré sa ukážu neskôr.
+Ešte ukážeme jeden dolný odhad, ktorý je o trochu rýchlejší ako odhad pomocou kostier a navyše má
+niektoré príjemné vlastnosti, ktoré sa ukážu neskôr.
 
-  \begin{definicia}
-  Daný je ohodnotený graf $G = (V, E)$. Graf $k$ najbližších susedov $G_s = (V, E)$ je orientovaný
-  graf taký, že z každého vrchola $v \in V$ vychádza $k$ najkratších hrán, ktoré s vrcholom $v$
-  susedia v $G$. 
-  \end{definicia}
+\begin{definicia}
+Daný je ohodnotený graf $G = (V, E)$. Graf $k$ najbližších susedov $G_s = (V, E)$ je orientovaný
+graf taký, že z každého vrchola $v \in V$ vychádza $k$ najkratších hrán, ktoré s vrcholom $v$
+susedia v $G$. 
+\end{definicia}
 
-  \begin{lema}
-  Nech $s$ je celková dĺžka hrán v grafe $4$ najbližších susedov, nech $f$ je dĺžka najlacnejšieho
-  $4$-faktora a $t$ je dĺžka riešenia problému dvoch obchodných cestujúcich. Potom:
-  $$ \frac{1}{2} s \leq f \leq t$$
-  \end{lema}
+\begin{lema}
+Nech $s$ je celková dĺžka hrán v grafe $4$ najbližších susedov, nech $f$ je dĺžka najlacnejšieho
+$4$-faktora a $t$ je dĺžka riešenia problému dvoch obchodných cestujúcich. Potom:
+$$ \frac{1}{2} s \leq f \leq t$$
+\end{lema}
 
-  \begin{dokaz}
-  Druhá nerovnosť vyplýva z toho, že dve hamiltonovské kružnice tvoria dokopy 4-faktor.
-  Prvá nerovnosť vyplýva z toho, že keď z každej hrany 4-faktoru spravíme dve orientované hrany, tak
-  dostaneme graf v ktorom z každého vrchola vychádzajú práve 4 hrany.
-  \end{dokaz}
+\begin{dokaz}
+Druhá nerovnosť vyplýva z toho, že dve hamiltonovské kružnice tvoria dokopy 4-faktor.
+Prvá nerovnosť vyplýva z toho, že keď z každej hrany 4-faktoru spravíme dve orientované hrany, tak
+dostaneme graf v ktorom z každého vrchola vychádzajú práve 4 hrany.
+\end{dokaz}
 
-  My budeme hľadať graf $4$ najbližších susedov. Vieme ho nájsť pomerne priamočiaro v čase lineárnom
-  od počtu hrán. Opäť môžeme použiť aj transformáciu pomocou potenciálou. Cieľom je tento krát
-  dostať hodnotu $s/2$ čo najbližšie k hodnote $f$ (keďže najlacnejší 4-faktor sa pri zmene
-  potenciálov nezmení). Celý postup subgradientovej optimalizácie je rovnaký ako pri disjuktných
-  1-kostrách.
+My budeme hľadať graf $4$ najbližších susedov. Vieme ho nájsť pomerne priamočiaro v čase lineárnom
+od počtu hrán. Opäť môžeme použiť aj transformáciu pomocou potenciálou. Cieľom je tento krát
+dostať hodnotu $s/2$ čo najbližšie k hodnote $f$ (keďže najlacnejší 4-faktor sa pri zmene
+potenciálov nezmení). Celý postup subgradientovej optimalizácie je rovnaký ako pri disjuktných
+1-kostrách.
 
-  \begin{poznamka}
-  Vedeli by sme aj priamo hľadať najlacnejší $4$-faktor prevedením na hľadanie najlacnejšieho
-  $1$-faktora v správne pozmenenom grafe. Výhoda nášho prístupu sa ukáže neskôr, keď budeme
-  vyhľadávať hrany, ktoré zaručene nepoužijeme v optimálnom riešení.
-  \end{poznamka}
+\begin{poznamka}
+Vedeli by sme aj priamo hľadať najlacnejší $4$-faktor prevedením na hľadanie najlacnejšieho
+$1$-faktora v správne pozmenenom grafe. Výhoda nášho prístupu sa ukáže neskôr, keď budeme
+vyhľadávať hrany, ktoré zaručene nepoužijeme v optimálnom riešení.
+\end{poznamka}
 
-  \section{Heuristiky na hľadanie horného odhadu veľkosti riešenia}
+\section{Heuristiky na hľadanie horného odhadu veľkosti riešenia}
 
-  Na hľadanie horného odhadu veľkosti riešenia použijeme upravenú Lin-Kernighanovu heuristiku pre
-  problém obchodného cestujúceho (\cite{link}). Táto heuristika postupne vylepšuje nájdené
-  riešenie pomocou lokálnych zmien. V každom kroku vyberie množinu $k$ hrán $X$, ktoré z aktuálneho
-  riešenia odstráni a množinu $k$ hrán $Y$, ktorú do riešenia pridá. Tejto operácii sa zvykne
-  hovoriť aj $k$-opt krok, v našej implementácii budeme používať $k$ maximálne 5.
+Na hľadanie horného odhadu veľkosti riešenia použijeme upravenú Lin-Kernighanovu heuristiku pre
+problém obchodného cestujúceho (\cite{link}). Táto heuristika postupne vylepšuje nájdené
+riešenie pomocou lokálnych zmien. V každom kroku vyberie množinu $k$ hrán $X$, ktoré z aktuálneho
+riešenia odstráni a množinu $k$ hrán $Y$, ktorú do riešenia pridá. Tejto operácii sa zvykne
+hovoriť aj $k$-opt krok, v našej implementácii budeme používať $k$ maximálne 5.
 Lin-Kernighanova heuristika kladie na tieto množiny ešte niekoľko obmedzení:
 
 \begin{itemize}
@@ -252,7 +252,15 @@ $$\sum_{e \in G} x_e \leq 2n - 1$$
 Použiť podmienku:
 $$\sum_{e \in G_1^{'}} x_e \leq |E_1^{'}| - 1$$
 
-Táto technika ale nefunguje rekurzívne, ale iba pri prvej dekompozícii.
+Táto podmienka hovorí, že daný graf potrebujeme zmeniť.
+Táto technika ale nefunguje rekurzívne, ale iba pri prvej dekompozícii. Protipríklade môžeme vidieť
+na obrázku \ref{TODO}. Po troch krokoch dekompozície by sme zistili, že problematický je graf $G_1$.
+Avšak riešenie sa dá dosiahnúť ak tak, že graf $G_1$ nezmeníme, ale prepojíme medzi sebou napríklad
+grafy $G_2$ a $G_3$.
+
+TODO obrázok
+
+
 
 \medskip
 
@@ -350,7 +358,8 @@ súradnice bodov sú vyberané rovnomerne náhodne) a niektoré inštancie z TSP
 Hľadanie dolných a horných odhadov sme implementovali v C++. Na riešenie celočíselných
 lineárnych programov sme použili Numberjack, ktorý používa SCIP a ako SAT solver sme použili knižnicu STP, ktorá
 používa MINISAT. Réžiu okolo celočíselných lineárnych programov a SAT solvera sme
-implementovali v jazyku Python. 
+implementovali v jazyku Python. Algoritmy sme testovali na počítači s procesorom
+Intel i7 Q720. 
 
 Testovali sme tri rôzne implementácie. Jedna nepoužívala žiadne vyhadzovanie nepotrebných
 hrán, druhá používala vyhadzovanie nepotrebných hrán cez štyroch najbližších susedov a tretia
@@ -366,12 +375,9 @@ Následne sme každú našu implementáciu pustili a sledovali niekoľko údajov
 \item Koľko hrán bolo označených ako nepoužiteľné.
 \end{itemize}
 
-V prípade, že sme používali odhady, sme navyše počítali aj relatívne rozdiely
-medzi dolným a horným odhadom, resp. medzi odhadmi a optimálnym riešením.
+\subsection{Výsledky pre náhodné grafy v euklidovskej rovine}
 
-\subsection{Výsledky pre náhodny grafy v euklidovskej rovine}
-
-V tabuľke \ref{TODO} sú zhrnuté priemerné výsledky pre každú veľkosť grafu.
+V tabuľke \ref{table1} sú zhrnuté priemerné výsledky pre každú veľkosť grafu.
 Označenia: 
 \begin{myitemize}
 \item $n$ -- veľkosť grafu
@@ -400,9 +406,26 @@ dvoch disjuktných kostier
 \hline
 $n$&$f_a$&$f_u$&$f_1$&$s_n$&$t_n$&$u_n$&$s_4$&$t_4$&$u_4$&$d_4$&$s_k$&$t_k$&$u_k$&$d_k$ \\\hline
 100& 57  & 29  & 5   & 0.9 & 736 & 378 & 0.9 & 687 & 322 & 0.64& 0.9 & 585 & 249 & 0.63 \\\hline
-150& 83  & 28  & 4   & 0.7 & 1380& 428 & 0.7 & 1327& 353 & 0.61& 0.7 & 1318& 334 & 0.53 \\\hline
-200& 68  & 8   & 3   & 0.5 & 2000& 400 & 0.5 & 1903& 206 & 0.56& 0.5 & 1924& 226 & 0.51 \\\hline
-250& 46  & 22  & 2   & 0.3 & 2769& 819 & 0.4 & 2662& 1255& 0.50& 0.4 & 2630& 1136& 0.45 \\\hline
+150& 83  & 28  & 4   & 0.7 & 1380& 428 & 0.7 & 1327& 353 & 0.61& 0.7 & 1314& 334 & 0.53 \\\hline
+200& 68  & 8   & 3   & 0.5 & 2000& 400 & 0.5 & 1903& 206 & 0.56& 0.5 & 1913& 226 & 0.51 \\\hline
+250& 46  & 22  & 2   & 0.3 & 2769& 819 & 0.4 & 2662& 1255& 0.50& 0.4 & 2615& 1136& 0.45 \\\hline
+300& 34  & 6   & 0   & 0.2 & 3087& 1035& 0.2 & 3029& 745 & 0.52& 0.2 & 3021& 705 & 0.41 \\\hline
 \end{tabular}
 \caption{Výsledky pre náhodné grafy.}
+\label{table1}
 \end{table}
+
+Z tabuľky sa dá usúdiť niekoľko záverov.
+
+Vidíme, že odhad pomocou štyroch najbližších susedov
+odstráni viac hrán ako odhad pomocou dvoch kostier. Z hľadiska celkového času sú tieto algoritmy
+porovnateľné. Ďalej vidíme, že odstráňovanie týchto hrán sa opláca (pri veľkosťi 250 je menší
+čas pri neorezávaní spôsobený tým, že zarátavame iba 3 inštancie namiesto 4).
+
+V porovnaní s \cite{duchenne} máme o niečo vyššiu úspešnosť, oni pri inštanciách
+veľkosti $190$ dosahujú úspešnosť $0.2$ a pre väčšie inštancie vyzerá, že sú neúspešní.
+My túto hranicu posúvame na $300$.
+
+\subsection{Výsledky pre niektoré inštancie z TSPLIB}
+
+
