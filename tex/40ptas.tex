@@ -3,10 +3,10 @@ vzdialenosti medzi nimi. V prípade obyčajného problému obchodného cestujúc
 existuje PTAS (polynomial time approximation scheme) (\cite{Arora}), t.j. algoritmus, ktorý
 pre ľubovoľný aproximačný pomer beží v polynomiálnom čase od veľkosti vstupu.
 
-My v nasledujúcej časti použijeme myšlienky z tohoto algoritmu a ukážeme ako spraviť PTAS pre
+My v nasledujúcej časti použijeme myšlienky z tohoto algoritmu a ukážeme PTAS pre
 problém dvoch obchodných cestujúcich.
 
-Hlavnou myšlienkou algoritmu pomocou techniky rozdeľuj a panuj vybudovať nad vstupom
+Hlavnou myšlienkou algoritmu je pomocou techniky rozdeľuj a panuj vybudovať nad vstupom
 randomizovaný quad-tree. Následne ukážeme, že pre $(1 + 1/c)$-aproximačný algoritmus stačí, aby
 TSP-cesty pretínali hrany delenia iba $O(c)$ krát. Navyše tieto prieniky sa môžu
 udiať iba v niektorých špeciálnych bodoch.
@@ -47,19 +47,24 @@ $(a,b)$-posunutie rekurzívneho delenia definujeme tak, že $x$-, $y-$ súradnic
 zvýšime o $a$ resp. $b$ a následne spočítame ich zvyšok po delení číslom $L$ (vstupnými bodmi
 nehýbeme). Takisto posunieme aj okrajové čiary štvorca (začnú tvoriť deliace čiary). Pôvodný štvorec
 pokladáme za zacyklený, teda okrajové oblasti pri posunutom delení tvoria súvislú oblasť ako na
-obrázku.
-
-TODO obrázok
+obrázku \ref{fig:quadtree}.
 
 Z posunutého rekurzívneho delenia vieme dodefinovať quadtree s posunom tak, že nebudeme deliť
 štvorce, ktoré obsahujú najviac jeden bod.
 
 \section{Portály a $(m,r)$-ľahké cesty}
 
+\begin{figure}[h]
+\centering
+\includegraphics{img/quadtree.png}
+\caption{Posunuté rekurzívne delenie a portály}
+\label{fig:quadtree}
+\end{figure}
+
 Nás algoritmus dovolí TSP-cestám pretínať čiary delenia iba v niekoľkých
 predpísaných bodoch, tzv. {\bf portáloch}. Toto je na prvý pohľad trochu kontraintuitívne.
 My ale dovolíme cestujúcim cestovať medzi bodmi po ľubovoľnej čiare, teda nie nutne najkratšej
-ceste medzi dvoma bodmi (viď. obrázok nižšie). Stále ale zachovávame disjuktnosť ciest, t.j. keď
+ceste medzi dvoma bodmi (viď. obr. \ref{fig:quadtree}). Stále ale zachovávame disjuktnosť ciest, t.j. keď
 jeden cestujúci ide z vrchola $x$ do vrcholu $y$, tak druhý nemôže ísť z $x$ do $y$ ani z $y$ do
 $x$ (nech ide ľubovoľne zakrivenou cestou). 
 
@@ -69,19 +74,16 @@ delenie je množina bodov taká, že každá deliacia čiara úrovne $i$ obsahuj
 vzdialenostiach $\frac{L}{m2^i}$. 
 \end{definicia}
 
-TODO obrázok
 
 \begin{definicia}
 TSP-cesta sa nazýva $(m,r)$-ľahká ak pretína čiary rekurzívneho delenia iba v $m$-regulárnej
 množine portálov a navyše každú hranu štvorca pretína najviac $r$-krát.
 \end{definicia}
 
-TODO theorem poriadne
-
-Teraz sformuluje hlavnú vetu, ktorá dokazuje koreknosť nášho algoritmu.
+Teraz sformulujeme hlavnú vetu, ktorá dokazuje koreknosť nášho algoritmu.
 
 \begin{veta}
-Nech $c > 0$ je ľubovoľná konštanta. Nech sú všetky body vo vstupe vzdialené aspoň $8$ a nech všetky
+Nech $c > 0$ je ľubovoľná konštanta. Nech je každá nenulová vzdialenosť vo vstupe aspoň $8$ a nech všetky
 body ležia vo vnútri štvorca so stranou $L$. Nech $0 \leq a, b < L$ sú vybrané náhodne. Potom s
 pravdepodobnosťou aspoň $1/2$ existujú dve disjuktné $(m,r)$-ľahké TSP-cesty, ktorých dĺžka je maximálne $(1 +
 1/c)$-násobok optimálnej dĺžky, pričom $m = O(c \lg L)$, $r = O(c)$.
@@ -92,7 +94,26 @@ Najprv sa pozrime na hľadanie najkratších $(m, r)$-ľahkých ciest.
 
 \section{Popis algoritmu}
 
-TODO perturbacia
+Ako sme už spomínali, algoritmus predpokladá, že vstupná inštancia je "slušná", t.j.:
+\begin{itemize}
+\item Body majú celočíselné súradnice.
+\item Nenulová vzdialenosť bodov je aspoň 8.
+\item Najväčšia vzdialenosť bodov je $O(n)$.
+\end{itemize}
+
+Vstupnú inštanciu upravíme na inštanciu, ktorá spĺňa tieto podmienky nasledovne:
+Nech $L_0$ je dĺžka strany štvorca v ktorom leží vstupná inštancia a $d$ je dĺžka optimálneho
+riešenia. Navyše platí $L_0 \leq d$. V štvorci vyrobíme mriežku s veľkosťou bunky 
+$\frac{d}{8nc}$ a každy bod presunieme do najbližšieho mrežového bodu.
+Dĺžka jednej kružnice sa zmení maximálne o $\frac{2nL_0}{8nc} < \frac{d}{4c}$.
+Dĺžka dvoch kružníc sa zmení maximálne o $\frac{d}{2c}$. Teraz zmenšíme všetky vzdialenosť
+$\frac{L_0}{64nc}$ krát. Teda všetky súradnice budú celočíselné a minimálna nenulová vzdialenosť bodov
+bude aspoň $8$. Navyše dĺžka strany štvorca, v ktorom ležia body, bude $O(nc)$, čo je $O(n)$, keďže
+$c$ je konštanta.
+Po takejto transformácii, ale namiesto $1 + 1/c$ aproximácie musíme hľadať $1 + 1/2c$ aproximáciu,
+ale to nám nevadí, keďže $c$ môže byť ľubovoľná kladná konštanta.
+
+\bigskip
 
 V nasledujúcom kroku zvolíme hodnoty $a, b$ -- posuny quad-tree. Môžeme ich zvoliť náhodne
 a uspokojiť sa s tým, že máme iba pravdepodnostný algoritmus, alebo môžeme postupne vyskúšať všetky

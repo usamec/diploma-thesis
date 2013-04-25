@@ -4,7 +4,7 @@ dvoch obchodných cestujúcich.
 \section{Skúšanie všetkých možností}
 
 V grafe s $n$ vrcholmi sa nachádza $n!$ rôznych kružníc. Pokiaľ hľadáme
-dve disjuktné kružnice, tak rôzných dvojíc kružníc je $\tilde{O}((n!)^2)$.
+dve disjuktné kružnice, tak rôznych dvojíc kružníc je $\tilde{O}((n!)^2)$.
 Každú z týchto možností vieme overiť v čase $O(n)$. Celkový čas algoritmu
 je teda $\tilde{O}((n!)^2)$.
 
@@ -32,12 +32,12 @@ Množinu $X$ rozložíme na tri disjuktné množiny $A, B, C$.
 Vrcholy v množine $A$ zatiaľ do druhej kružnice zapojené nebudú. Vrcholy v množine
 $C$ budú spojené v druhej kružnici s inými dvoma vrcholmi.
 A vrcholy v množine $B$ budú spojené iba s jedným vrcholom. Čiže druhá kružnica je
-rozložená na niekoľko ciest, ktoré začínajú vo vrcholoch množiny $B$ idú cez niekoľko
+rozložená na niekoľko ciest, ktoré začínajú vo vrcholoch množiny $B$, idú cez niekoľko
 (alebo nula) vrcholov z množiny $C$ a následne končia vo vrchole z množiny $B$.
 Ešte ale potrebujeme jednu informáciu navyše -- ktoré koncové body ciest v množine
 $B$ sú spojené (čiže máme rozdelenie množiny $B$ do dvojíc).
 
-A v konečnom dôsledku pre každú kombináciu množín $A, B, C$ vrchola $x$ a rozdelení
+V konečnom dôsledku pre každú kombináciu množín $A, B, C$ vrchola $x$ a rozdelení
 vrcholov v množine $B$ hľadáme cestu $p$ cez vrcholy v množine $A \cup B \cup C$, ktorá
 začína vo vrchole $1$ a končí vo vrchole $x$ a množinu ciest $R$, ktoré
 spĺňajú podmienky množín $A, B, C$, kde cesty z $R$ sú disjuktné s $p$ a navyše cesty
@@ -49,8 +49,7 @@ príslušnosti do množiny $A, B, C$ si vyberieme vhodné zapojenie do druhej ce
 Keďže nové hrany pridávame len poslednému vrcholu, vieme priamočiaro kontrolovať podmienku
 disjuknosti ciest.
 
-TODO obrazok
-
+\bigskip
 
 Tento algoritmus vieme ešte urýchliť jedným orezávaním. Veľkosť množiny
 $B$ môže byť maximálne $\frac{2}{3}n$. V opačnom prípade by sme nevedeli tieto
