@@ -136,7 +136,12 @@ tvorená tak, že pre každý vrchol zoberieme $m$ najkratších hrán, ktoré s
 implementácii sme položili $m = 8$.
 \end{itemize}
 
-TODO obrázok
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.6]{img/opt3.pdf}
+\caption{3-opt krok, čiarkovane sú vyznačené hrany, ktoré odstraníme, resp. pridáme}
+\end{figure}
+
 
 Sekvenčné $k$-opt kroky vieme hľadať priamočiaro pomocou rekurzie -- v každom kroku si vyberieme,
 ktorú hranu pridáme do množiny $X$ alebo $Y$ (postupujeme striedavo), začíname najprv množinou $X$.
@@ -218,7 +223,13 @@ Graf $G_1^{'}$ vytvoríme z $G_1$ tak, že mu pridáme vrcholy $v_1, v_2$ a vše
 vrcholy $v_1, v_2$ s grafom $G_1$ v grafe $G$. Následne ešte spojíme vrcholy $v_1, v_2$ medzi sebou
 pomocou dvoch hrán. Obdobne vyrobíme z grafu $G_2$ graf $G_2^{'}$.
 
-TODO obrazok
+\begin{figure}
+\centering
+\includegraphics[width=15cm]{img/decomp.pdf}
+\caption{Dekompozícia grafu. Hore vľavo: vstupný graf $G$ s vyznačeným artikulačným párom. Hore
+vpravo: Graf po odstranení artikulačného páru. Dole: Vzniknuté grafy, po pridaní artikulačným párov
+a hrán medzi nimi.}
+\end{figure}
 
 Grafy $G_1^{'}, G_2^{'}$ budú 4-súvislé a 4-regulárne. Navyše o nich platí nasledovné.
 
@@ -246,7 +257,8 @@ Táto technika ale nefunguje rekurzívne, ale iba pri prvej dekompozícii.
 \medskip
 
 V našom algoritme používame ešte jednu operáciu, ktorá vstup pre SAT solver ešte zjednoduší.
-Myšlienka vyzerá nasledovne: Ak nájdeme nejakú štvorcu bodov, ktoré sú všetky navzájom spojené, tak
+Myšlienka vyzerá nasledovne: Ak nájdeme nejakú štvorcu bodov, ktoré sú všetky navzájom spojené
+(kliku veľkosti 4), tak
 ich môžeme zlučiť do jedného bodu.
 
 \begin{veta}
@@ -264,10 +276,15 @@ $G$ nemôže byť 4-regulárny.
 Ak sa graf $G$ dá rozložiť na dve hamiltonovské kružnice, tak triviálne vidno, že aj graf $G^{'}$ sa
 dá rozložiť (kružnice budú presne rovnaké akuráť vynecháme hrany medzi vrcholmi $v_1, \dots, v_4$).
 
-TODO obrázok
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.5]{img/k4.pdf}
+\caption{Prechod kružníc cez kliku veľkosti 4}
+\label{fig:k4}
+\end{figure}
 
 Ak sa graf $G^{'}$ dá rozložiť na dve hamiltonovské kružnice, tak pomocou vhodného prepojenia (viď.
-obrázok) medzi
+\ref{fig:k4}) medzi
 vrcholmi $v_1, \dots, v_4$ vieme graf $G$ rozložiť na dve hamiltonovské kružnice (ostatné hrany
 rozložíme medzi kružnice rovnako ako v grafe $G^{'}$).
 \end{dokaz}
@@ -339,8 +356,8 @@ Testovali sme tri rôzne implementácie. Jedna nepoužívala žiadne vyhadzovani
 hrán, druhá používala vyhadzovanie nepotrebných hrán cez štyroch najbližších susedov a tretia
 používala vyhadzovanie nepotrebných hrán pomocou dvoch disjuktných kostier.
 
-V prípade náhodných grafov v euklidovskej rovine sme generovali grafy veľkosti $100, 150, 200, 250,
-300$. Pre každú veľkosť sme vygenerovali 10 grafov.
+V prípade náhodných grafov v euklidovskej rovine sme generovali grafy veľkosti $100$, $150$, $200$,
+$250$, $300$. Pre každú veľkosť sme vygenerovali 10 grafov.
 Následne sme každú našu implementáciu pustili a sledovali niekoľko údajov:
 \begin{itemize}
 \item Či úspešne skončí do jednej hodiny. Ak neskončí, tak rátame riešenie za neúspešné.
