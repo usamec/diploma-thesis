@@ -119,7 +119,18 @@ do $y$ a naopak.
 Ako lepší sa ukazuje algoritmus s nasledujúcou myšlienkou: Namiesto hľadania dvoch
 disjuktných hamiltonovských kružníc budeme hľadať najlacnejší 4-regulárny 4-súvislý podgraf.
 Následne ak sa tento podgraf dá rozložiť na dve hamiltonovské kružnice, tak máme riešenie.
-Ináč tento podgraf zakážeme a budeme hľadať najlacnejší nezakázaný podgraf.
+Toto sa nemusí vždy podariť, na \ref{fig:bad} je príklad grafu, ktorý je 4-súvislý a 4-regulárny,
+ale nemá hamiltonovskú kružnicu. 
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.5]{img/bad4.pdf}
+\caption{Príklad grafu, ktorý je 4-súvislý a 4-regulárny, ale nie je hamiltonovský.}
+\label{fig:bad}
+\end{figure}
+
+Ak sa nám nepodarí 4-faktor rozložiť na dve hamiltonovské kružnice, tak tento 4-faktor zakážeme
+a budeme hľadať najlacnejší nezakázaný podgraf.
 Iný pohľad na tento algoritmus je taký, že v lineárnom programe zlúčíne premenné $x_e$ a $y_e$ 
 do jednej, čiže aktuálny program, ktorý budeme nazývať 2-index vyzerá takto:
 
