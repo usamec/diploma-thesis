@@ -405,11 +405,11 @@ dvoch disjuktných kostier
 \begin{tabular}{|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|}
 \hline
 $n$&$f_a$&$f_u$&$f_1$&$s_n$&$t_n$&$u_n$&$s_4$&$t_4$&$u_4$&$d_4$&$s_k$&$t_k$&$u_k$&$d_k$ \\\hline
-100& 57  & 29  & 5   & 0.9 & 736 & 378 & 0.9 & 687 & 322 & 0.64& 0.9 & 585 & 249 & 0.63 \\\hline
-150& 83  & 28  & 4   & 0.7 & 1380& 428 & 0.7 & 1327& 353 & 0.61& 0.7 & 1314& 334 & 0.53 \\\hline
-200& 68  & 8   & 3   & 0.5 & 2000& 400 & 0.5 & 1903& 206 & 0.56& 0.5 & 1913& 226 & 0.51 \\\hline
-250& 46  & 22  & 2   & 0.3 & 2769& 819 & 0.4 & 2662& 1255& 0.50& 0.4 & 2615& 1136& 0.45 \\\hline
-300& 34  & 6   & 0   & 0.2 & 3087& 1035& 0.2 & 3029& 745 & 0.52& 0.2 & 3021& 705 & 0.41 \\\hline
+100& 57  & 29  & 5   & 0.9 & 736 & 378 & 0.9 & 687 & 322 & 0.64& 0.9 & 585 & 249 & 0.70 \\\hline
+150& 83  & 28  & 4   & 0.7 & 1380& 428 & 0.7 & 1327& 353 & 0.61& 0.7 & 1314& 334 & 0.58 \\\hline
+200& 68  & 8   & 3   & 0.5 & 2000& 400 & 0.5 & 1903& 206 & 0.56& 0.5 & 1913& 226 & 0.60 \\\hline
+250& 46  & 22  & 2   & 0.3 & 2769& 819 & 0.4 & 2662& 1255& 0.50& 0.4 & 2615& 1136& 0.57 \\\hline
+300& 34  & 6   & 0   & 0.2 & 3087& 1035& 0.2 & 3029& 745 & 0.52& 0.2 & 3021& 705 & 0.52 \\\hline
 \end{tabular}
 \caption{Výsledky pre náhodné grafy.}
 \label{table1}
@@ -417,8 +417,8 @@ $n$&$f_a$&$f_u$&$f_1$&$s_n$&$t_n$&$u_n$&$s_4$&$t_4$&$u_4$&$d_4$&$s_k$&$t_k$&$u_k
 
 Z tabuľky sa dá usúdiť niekoľko záverov.
 
-Vidíme, že odhad pomocou štyroch najbližších susedov
-odstráni viac hrán ako odhad pomocou dvoch kostier. Z hľadiska celkového času sú tieto algoritmy
+Vidíme, že odhad pomocou dvoch kostier odstráni o niečo viac hrán ako odhad pomocou štyroch najbližších susedov
+Z hľadiska celkového času sú tieto algoritmy
 porovnateľné. Ďalej vidíme, že odstráňovanie týchto hrán sa opláca (pri veľkosťi 250 je menší
 čas pri neorezávaní spôsobený tým, že zarátavame iba 3 inštancie namiesto 4).
 
@@ -428,4 +428,71 @@ My túto hranicu posúvame na $300$.
 
 \subsection{Výsledky pre niektoré inštancie z TSPLIB}
 
+Výsledky pre inštancie z TSPLIB zhŕňa nasledujúca tabuľka. 
+Označenia (uvádzame iba iné ako v predchádzajúcej tabuľke a miesto priermerných časov uvádzame čas
+behu jednej inštancie):
+\begin{myitemize}
+\item Inst -- názov inštancie, číslo v názve vyjadruje počet vrcholov
+\item $t_d$ -- čas riešenia uvádzaný v \cite{duchenne}, ak bol uvádzaný
+\end{myitemize}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|r|r|r|r|r|r|r|r|}
+\hline
+Inst    &$f_a$&$t_n$&$t_4$&$d_4$&$t_k$&$d_k$&$t_d$ \\\hline
+kroA100 & 26  & 200 & 178& 0.66 & 187 & 0.73& -- \\\hline
+kroB100 & 3   & 25  & 23 & 0.70 & 24  & 0.61& 209 \\\hline 
+kroC100 & 5   & 45  & 41 & 0.65 & 43  & 0.67& 137 \\\hline
+kroD100 & 1   & 14  & 16 & 0.70 & 18  & 0.90& 10 \\\hline
+kroE100 & 1   & 8   & 10 & 0.73 & 16  & 0.68& 23 \\\hline
+bier127 & 24  & 220 & 225& 0.08 & 219 & 0.63& -- \\\hline 
+kroA150 & 1   & 18  & 26 & 0.55 & 20  & 0.85& 749 \\\hline
+kroA200 & 1   & 65  & 67 & 0.50 & 50  & 0.73& 311 \\\hline
+a280    & 1   & 201 & 203& 0.70 & 317 & 0.09& 3085 \\\hline
+lin318  & 1   & 573 & 276& 0.34 & 276 & 0.29& -- \\\hline
+rd400   & 1   & 813 & 857& 0.48 & 741 & 0.50& -- \\\hline
+pcb442  & 1   & TODO&1503& 0.20 & 1775& 0.23& -- \\\hline
+\end{tabular}
+\end{table}
+
+Výsledky ukazujú, že náš algoritmus je rádovo rýchlejši ako algoritmus od \cite{duchenne}.
+Naša najväčšia zriešená inštancia má veľkosť $442$, v ich prípade je to $280$.
+Navyše sa ukazuje, že vymazávanie nepotrebných hrán pomáha, ale nie je to hlavný faktor nášho
+zrýchlenia. Autori prechádzajúceho algoritmu hovoria, že drvivú väčšinu času ich algoritmus strávi
+zistovaním, či je príslušný 4-súvislý 4-faktor rozložiteľný na dve hamiltonovské kružnice.
+Preto sme zobrali niektoré inštancie z TSPLIB, ktoré boli rozložiteľné na prvý krat
+a pustili ich na našom algoritme bez vyhadzovania hrán. Tentokrát sme nemerali celkový čas, ale
+aké percento času algoritmus strávil hľadaním rozkladu na kružnice ($p_r$). Toto sme porovnali s
+predchádzajúcimi výsledkami $p_d$. Pre prehľadnosť uvádzame aj časy riešenia.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|r|r|r|r|r|}
+\hline
+Inst   & $p_r$ & $p_d$ & $t_n$ & $t_d$ \\\hline
+kroD100& 0.43  & 0.90  & 14    & 10 \\\hline
+kroE100& 0.71  & 1.00  & 8     & 23 \\\hline
+kroA150& 0.35  & 0.95  & 18    & 749 \\\hline
+kroA200& 0.44  & 0.93  & 65    & 311 \\\hline
+a280   & 0.93  & 0.73  & 201   & 3085 \\\hline
+\end{tabular}
+\end{table}
+
+V tabuľky vidno, že náš algoritmus trávi oveľa menej času pri zistovaní, či je daný 4-súvislý
+4-faktor rozložiteľný na dve hamiltonovské kružnice. To mu umožňuje vyriešiť aj niektoré inštancie,
+ktoré toto potrebujú zistovať aj viac krát (napr. bier127).
+
+\bigskip
+
+Z týchto meraní teda vyplýva, že hlavnou výhodou nášho algoritmu je lepší algoritmus na rozkladanie
+grafu na dve kružnice. V niektorých prípadoch vieme navyše algoritmus zrýchliť aj tým, že nájdeme
+nepoužiteľné hrany, ale toto zrýchlenie je oveľa slabšie. Náš algoritmus vie riešiť náhodné
+inštancie do veľkosti 300 a aj niektoré väčšie inštancie, pokiaľ sa mu ich podarí rozložiť na prvý
+pokus.
+
+Zaujímavou teoretickou otázkou aký očakávaný počet takýchto rozkladov pre rôzne $n$.
+Táto otázka je pomerne príbuzná otázke: koľko percent 4-súvislých 4-regulárny grafov s $n$ vrcholmi
+sa dá rozložiť na dve hamiltonovské kružnice. Bohužial nepodarilo sa nám nájsť žiadny odhad
+na počet 4-súvislých 4-regulárnych grafov a teda na túto otázku odpovedať nevieme.
 
