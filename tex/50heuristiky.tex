@@ -1,4 +1,3 @@
-TODO poriadny nazov kapitoly
 
 V tejto časti popíšeme niekoľko algoritmov, ktoré sú pomerne úspešné
 na praktických inštanciách problému, ale väčšinou je ich teoretická
@@ -497,3 +496,49 @@ Táto otázka je pomerne príbuzná otázke: koľko percent 4-súvislých 4-regu
 sa dá rozložiť na dve hamiltonovské kružnice. Bohužial nepodarilo sa nám nájsť žiadny odhad
 na počet 4-súvislých 4-regulárnych grafov a teda na túto otázku odpovedať nevieme.
 
+\section{Heuristiky pre väčšie inštancie}
+
+Na webovej stránke Kaggle.com sa konala súťaž Travelling santa problem, v ktorej bola
+zadaná inštancia problému dvoch obchodných cestujúcich s drobnými obmenami, ktorá mala
+150000 vrcholov, ktoré predstavovali body v rovine. Spomínané obmeny boli:
+\begin{itemize}
+\item Cieľom nebolo nájsť disjuktné kružnice, ale disjuktné cesty, ktoré prechádzali
+všetkými vrcholmi.
+\item Cieľom nebolo minimimalizovať súčet dĺžok ciest, ale minimalizovať dĺžku dlhšej
+cesty.
+\end{itemize}
+
+Do tejto súťaže sme sa zapoli spolu s Petrom Perešínim. Skončili sme na prvom mieste,
+kde naše riešenie malo dĺžku $6526972$, pričom nami vyratány dolný odhad
+mal veľkosť: $6525773$. To znamená, že sme boli od opmima vzdialený najviac
+$1199$, čo je asi $0.02\%$.
+
+Okrem techník spomenutých vyššie sme v tejto súťaži využili niekoľko ďalších heuristík:
+
+Neriešili sme problém zo zadania, t.j. minimalizovať dĺžku dlhšej cesty, ale našim
+cieľom bolo minimalizovať súčet dĺžok ciest. Zistili sme, že nie je problém zabezpečiť,
+aby cesty mali takmer podobnú dĺžku (stačí niekoľko prehodení hrán medzi cestami) a preto
+nám táto zmena nerobí veľký problém.
+
+Robili sme dolný odhad priamo pomocou najmenšieho 4-faktoru. Tento sme rátali
+pomocou celočíselného lineárneho programu. Navyše sme ho nemohli rátať priamo
+pre inštanciu veľkosti $150000$. Preto sme danú inštanciu nasekali na menšie
+obdĺžnikové kúsky a hľadali najmenší 4-faktor v nich. Nepríjemnou technickou
+záležisťou bolo urobiť tento dolný odhad pre 2 cesty miesto 2 cyklov.
+
+Pri riešení sme využívali aj vyššie spomínané celočíselné lineárne programovanie
+spolu so SAT solverom. Opäť sme nechceli nájsť optimálne riešenie pre celú inštanciu,
+ale optimálne riešenie pre nejakú danú časť.
+
+Ešte sme používali jednu heuristiku. Jej kroky sa dajú zhrnúť nasledovne:
+\begin{enumerate}
+\item Spoj obidve cesty do jedného grafu (dostaneme takmer 4-regulárny graf)
+\item V tomto grafe nájde alternujúcu kružnicu, ktorá má zápornú cenu (t.j. cena vložených
+hrán je menšie ako cena odstránených hrán) a následne pomocou nej zmenší veľkosť
+daného grafu.
+\item Pokús sa graf spätne rozložiť na dve cesty.
+\end{enumerate}
+
+V kroku 2 sme hľadali pomerne dlhé alternujúce kružnice. Na toto sme opäť
+použili heuristiku. Tak isto sme použili aj heuristiku na rozkladanie grafu
+na dve cesty. Viac o týchto heuristikách sa dá nájsť v \cite{kaggle}. 
