@@ -3,9 +3,9 @@ a jeho variácie, ktoré budeme riešiť.
 
 \begin{definicia}[Problém dvoch obchodných cestujúcich]
 Majme daný úplný ohodnotený graf $G = (V, E)$ s $n$ vrcholmi, pričom každá hrana
-$e \in E$ má dĺžku $c(e)$. Cieľom je nájsť dve hranovo disjuktné kružnice $K_1 \subset E$,
-$K_2 \subset E$, tak aby súčet ich dĺžok bol minimálny. Kružnice $K_1, K_2$ budeme volať aj
-TSP-cesty.
+$e \in E$ má dĺžku $c(e)$. Cieľom je nájsť dve hranovo disjuktné hamiltonovské kružnice
+$K_1 \subset E$, $K_2 \subset E$, tak aby súčet ich dĺžok bol minimálny.
+Kružnice $K_1, K_2$ budeme volať aj TSP-cesty.
 \end{definicia}
 
 \begin{poznamka}
@@ -23,3 +23,5 @@ $$\forall u,v,w \in V: c(u,v) + c(v,w) \geq c(u,w)$$
 Ešte silnejším obmedzením je požadovať, aby vrcholy grafu zodpovedali bodom v rovine, t.j.
 každému vrcholu priradíme reálne čísla $x_v, y_v$ a vzdialenosť vrcholov $u, v$ bude:
 $\sqrt{(x_u - x_v)^2 + (y_u - y_v)^2}$.
+
+

@@ -1,5 +1,11 @@
 V tejto kapitole sa budeme venovať pomalým metódam riešenia problému
-dvoch obchodných cestujúcich.
+dvoch obchodných cestujúcich. Najskôr prezentujeme niekoľko pomerne triviálnych
+výsledkov na základne známych algoritmov a potom prezentujeme náš algoritmus, ktorý
+je asympoticky rýchlejší.
+
+Navyše v tento kapitole budeme používať označenie $f(n) = \tilde{O}(g(n))$, ktoré
+má rovnaký význam ako $f(n) = O(g(n) n^{O(1)})$, t.j. okrem konštatných faktorov,
+ignorujeme aj všetky faktory, ktoré sú menšie alebo rovné ako polynomiálne.
 
 \section{Skúšanie všetkých možností}
 
@@ -22,7 +28,10 @@ algoritmus, ktorý beží v čase $\tilde{O}(2^n n!)$.
 
 \section{Lepšie dynamické programovanie}
 
-V tomto prípade budeme robiť dynamické programovanie priamo pre problém
+V tejto časti prezentujeme vlastný exaktný algoritmus na riešenie problému
+dvoch obchodných cestujúcich.
+
+Budeme robiť dynamické programovanie priamo pre problém
 dvoch obchodných cestujúcich. Náš prístup bude podobný ako pri probléme
 obchodného cestujúceho. 
 Budeme hľadať jednu najkratšiu cestu cez danú podmnožinu vrcholov

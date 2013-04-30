@@ -3,8 +3,8 @@ vzdialenosti medzi nimi. V prípade obyčajného problému obchodného cestujúc
 existuje PTAS (polynomial time approximation scheme) (\cite{Arora}), t.j. algoritmus, ktorý
 pre ľubovoľný aproximačný pomer beží v polynomiálnom čase od veľkosti vstupu.
 
-My v nasledujúcej časti použijeme myšlienky z tohoto algoritmu a ukážeme PTAS pre
-problém dvoch obchodných cestujúcich.
+My v nasledujúcej časti použijeme myšlienky z tohoto algoritmu a ukážeme náš PTAS algoritmus
+pre problém dvoch obchodných cestujúcich.
 
 Hlavnou myšlienkou algoritmu je pomocou techniky rozdeľuj a panuj vybudovať nad vstupom
 randomizovaný quad-tree. Následne ukážeme, že pre $(1 + 1/c)$-aproximačný algoritmus stačí, aby
@@ -93,6 +93,9 @@ Dôkaz tejto vety uvedieme neskôr.
 Najprv sa pozrime na hľadanie najkratších $(m, r)$-ľahkých ciest.
 
 \section{Popis algoritmu}
+
+V tejto časti ukážeme ako sme algoritmus od \cite{Arora} upravili tak, aby
+riešil problém dvoch obchodných cestujúcich.
 
 Ako sme už spomínali, algoritmus predpokladá, že vstupná inštancia je "slušná", t.j.:
 \begin{itemize}
@@ -210,7 +213,7 @@ prechádza všetkými cestami $P_1, \dots, P_t$ a navyše pretína $S$ najviac d
 súčet všetkých pridaných úsečiek je najviac $6s$. A teda sme dokázali túto vetu pre $g = 6$.
 \end{dokaz}
 
-My potrebujeme túto lemu zovšeobecniť pre dvoch obchodných cestujúcich.
+My sme túto lemu upravili pre dvoch obchodných cestujúcich.
 
 \begin{lema}
 Existuje konštanta $g > 0$ taká, že platí nasledovné: Nech $S$ je úsečka dĺžky $s$ a $\pi$ je
@@ -273,7 +276,9 @@ najbližšiemu bodu, tak celkové predĺženie bude najviac $34s$ (lebo môžeme
 stranách). 
 \end{dokaz}
 
-Zvyšok dôkazu je rovnaký ako v \cite{Arora} až na zmenu niekoľkých konštánt.
+Zvyšok dôkazu je rovnaký ako v \cite{Arora} až na zmenu niekoľkých konštánt a to, že
+rozdiel medzi optimálnym riešením a $(m,r)$-ľahkou cestou počítame pre dve cesty
+miesto jednej.
 %TODO: možno ho tu napísať
 
 \section{Rýchlejší algoritmus}
@@ -281,6 +286,7 @@ Zvyšok dôkazu je rovnaký ako v \cite{Arora} až na zmenu niekoľkých konšt�
 Počet stavov v doteraz popísanom algoritme najviac dvíhala nutnosť pamätať si, ktorý vrchol
 nasleduje za ktorým prechodom. Túto informáciu sme si pamätali preto, aby sme zabezpečili
 disjuktnosť ciest, keď spájame informácie z jednotlivých synov štvorca v quad-tree.
+Teraz ukážeme ako algoritmus upraviť, aby jeho časová zložitosť bola menšia.
 
 Disjuktnosť vieme zabezpečiť aj s menším počtom stavov.
 Stačí nám vedieť, že či za dvoma prechodmi portálmi leží rovnaký vrchol.
