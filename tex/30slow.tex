@@ -44,7 +44,8 @@ A vrcholy v množine $B$ budú spojené iba s jedným vrcholom. Čiže druhá kr
 rozložená na niekoľko ciest, ktoré začínajú vo vrcholoch množiny $B$, idú cez niekoľko
 (alebo nula) vrcholov z množiny $C$ a následne končia vo vrchole z množiny $B$.
 Ešte ale potrebujeme jednu informáciu navyše -- ktoré koncové body ciest v množine
-$B$ sú spojené (čiže máme rozdelenie množiny $B$ do dvojíc).
+$B$ sú spojené (čiže máme rozdelenie množiny $B$ do dvojíc). Túto informáciu
+potrebujeme nato, aby sme zabránili zacykleniu druhej cesty. 
 
 V konečnom dôsledku pre každú kombináciu množín $A, B, C$ vrchola $x$ a rozdelení
 vrcholov v množine $B$ hľadáme cestu $p$ cez vrcholy v množine $A \cup B \cup C$, ktorá
@@ -54,9 +55,10 @@ z $R$ a $p$ sú v súčte čo najkratšie.
 
 Tento podproblém vieme jednoducho riešiť pomocou riešení menších podproblémov.
 Vyskúšame všetky predchádzajúce vrcholy pre vrchol $x$ v prvej ceste a zároveň podľa jeho
-príslušnosti do množiny $A, B, C$ si vyberieme vhodné zapojenie do druhej cesty.
+príslušnosti do množiny $A, B, C$ si vyberieme vhodné zapojenie do druhej cesty
+(kontrolujeme, či cesty sú disjuktné a či sa druhá cesta nezacyklila).
 Keďže nové hrany pridávame len poslednému vrcholu, vieme priamočiaro kontrolovať podmienku
-disjuknosti ciest.
+disjuknosti ciest. 
 
 \bigskip
 

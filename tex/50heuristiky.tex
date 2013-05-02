@@ -3,7 +3,7 @@ V tejto časti popíšeme niekoľko algoritmov, ktoré sú pomerne úspešné
 na praktických inštanciách problému, ale väčšinou je ich teoretická
 analýza pomerne ťažká. Popíšeme niekoľko heuristík, ktoré v pomerne krátkom čase
 dávajú riešenie, ktoré je väčšinou blížko optimálneho. Aby sme vedeli odhadnúť
-kvalitu týchto heuristík, najprv ale ukážeme niekoľko algoritmov na hľadanie dolného odhadu
+kvalitu týchto heuristík, najprv ukážeme niekoľko algoritmov na hľadanie dolného odhadu
 veľkosti riešenia. Následne ešte vylepšíme algoritmus používajúci
 celočíselné lineárne programovanie od \cite{duchenne}, aby
 sme dokázali optimálne riešiť inštancie, ktoré majú najviac 400 vrcholov.
@@ -252,13 +252,32 @@ Použiť podmienku:
 $$\sum_{e \in G_1^{'}} x_e \leq |E_1^{'}| - 1$$
 
 Táto podmienka hovorí, že daný graf potrebujeme zmeniť.
-Táto technika ale nefunguje rekurzívne, ale iba pri prvej dekompozícii. Protipríklade môžeme vidieť
-na obrázku \ref{TODO}. Po troch krokoch dekompozície by sme zistili, že problematický je graf $G_1$.
-Avšak riešenie sa dá dosiahnúť ak tak, že graf $G_1$ nezmeníme, ale prepojíme medzi sebou napríklad
+Táto technika ale nefunguje rekurzívne, ale iba pri prvej dekompozícii. Protipríklad môžeme vidieť
+na obrázku \ref{fig:bd}. Po troch krokoch dekompozície by sme pôvodný graf rozložili
+na grafy $G_1$, $G_2, G_3, G_4$ a následne by sme zistili, že problematický je graf $G_1$.
+Avšak riešenie sa dá dosiahnúť aj tak, že graf $G_1$ nezmeníme, ale prepojíme medzi sebou napríklad
 grafy $G_2$ a $G_3$.
 
-TODO obrázok
-
+\begin{figure}[h]
+  \centering
+  \begin{subfigure}[b]{1\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{img/bad4.pdf}
+    \caption{Pôvodný graf}
+  \end{subfigure}\\
+  \begin{subfigure}[b]{0.35\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{img/bd1.pdf}
+    \caption{$G_1$}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.6\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{img/bd2.pdf}
+    \caption{$G_2, G_3, G_4$}
+  \end{subfigure}
+  \caption{Protipríklad pri rekurzívnej dekompozícii}
+  \label{fig:bd}
+\end{figure}
 
 
 \medskip
@@ -541,4 +560,4 @@ daného grafu.
 
 V kroku 2 sme hľadali pomerne dlhé alternujúce kružnice. Na toto sme opäť
 použili heuristiku. Tak isto sme použili aj heuristiku na rozkladanie grafu
-na dve cesty. Viac o týchto heuristikách sa dá nájsť v \cite{kaggle}. 
+na dve cesty. Viac o týchto heuristikách sa dá nájsť v \cite{KAGGLE}. 

@@ -15,12 +15,14 @@
 \usepackage{mathrsfs}
 \usepackage{verbatim}
 \usepackage{hyperref}
-\usepackage{subfigure}
+\usepackage{subcaption}
 \usepackage{float}
 \usepackage{longtable}
 \usepackage{listings}
 \usepackage{graphicx}
 \usepackage{mathtools}
+\usepackage{geometry}
+\usepackage{pdflscape}
 \input{utility/makra.tex}
 
 \linespread{1.3}
@@ -95,9 +97,12 @@ FAKULTA MATEMATIKY, FYZIKY A INFORMATIKY \\
 \hfill{\bf Vladimír Boža}
 \eject % EOP i
 
-%\thispagestyle{empty}
-%\includegraphics[scale=0.7]{zad.pdf}
-%\eject
+\newgeometry{margin=1cm}
+\thispagestyle{empty}
+%\includegraphics[clip,trim=2.5cm 0 0 0,scale=1]{img/zadanie.PDF}
+\includegraphics[clip,trim=1.5cm 5cm 0 0,scale=1]{img/zadanie.PDF}
+\eject
+\restoregeometry
 
 \thispagestyle{empty}
 
